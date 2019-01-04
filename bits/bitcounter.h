@@ -1,14 +1,15 @@
 #pragma once
+#include <cstdint>  // CHAR_BIT
 #include <string>
 
 template<typename T>
-constexpr int nbytes(T in) {
-	return sizeof(T)/sizeof(unsigned char);
+constexpr size_t nbytes(T in) {
+	return sizeof(T);
 };
 
 template<typename T>
-constexpr int nbits(T in) {
-	return 8*(sizeof(T)/sizeof(unsigned char));
+constexpr size_t nbits(T in) {
+	return CHAR_BIT*sizeof(T);
 };
 
 
@@ -30,19 +31,16 @@ int ones(T in) {
 };
 
 
+
 template<typename T>
 std::string bitprinter(T in) {
 	unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&in));
 
-	std::string s {};  s.reserve(nbits(in)); //s.reserve(8*(sizeof(T)/sizeof(unsigned char)));
-	for (int i=0; i<nbytes(in)/*sizeof(T)/sizeof(unsigned char)*/; ++i) {
+	std::string s {};  s.reserve(nbits(in));
+	for (int i=0; i<nbytes(in); ++i) {
 		unsigned char mask {1};
-		for (int j=0; j<8; ++j) {
-			if (mask & *p) {
-				s += '1';
-			} else {
-				s += '0';
-			}
+		for (int j=0; j<nbits(mask); ++j) {
+			s += (mask & *p) ? '1' : '0';
 			mask = mask << 1;
 		}
 		++p;
