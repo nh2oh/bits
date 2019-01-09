@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>  // CHAR_BIT
 #include <string>
+#include <array>
 
 template<typename T>
 constexpr size_t nbytes(T in) {
@@ -31,9 +32,26 @@ int ones(T in) {
 };
 
 
+template<typename T, int N=sizeof(T)>
+std::array<unsigned char,N> rbyteorder(T in) {
+	unsigned char *p_in = static_cast<unsigned char*>(static_cast<void*>(&in));
+	//int n = nbytes(in);
+
+	//T result {0};
+	std::array<unsigned char,N> result {};
+	unsigned char *p_r = static_cast<unsigned char*>(static_cast<void*>(&result));
+	for (int i=(N-1); i>=0; --i) {
+		*p_r = *(p_in+i);
+		++p_r;
+	}
+
+	return result;
+};
+
+
 
 template<typename T>
-std::string bitprinter(T in) {
+std::string bitprinter(T in, const char byte_sep = '|') {
 	unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&in));
 
 	std::string s {};  s.reserve(nbits(in));
@@ -43,6 +61,7 @@ std::string bitprinter(T in) {
 			s += (mask & *p) ? '1' : '0';
 			mask = mask << 1;
 		}
+		s += byte_sep;
 		++p;
 	}
 
