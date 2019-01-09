@@ -47,7 +47,7 @@ std::array<unsigned char,N> rbyteorder(T in) {
 	return result;
 };
 
-
+// TODO:  memcpy() ?
 template<typename T>
 std::array<unsigned char,sizeof(T)> to_byte_array(const T& in) {
 	std::array<unsigned char,sizeof(T)> result {};
@@ -62,7 +62,7 @@ std::array<unsigned char,sizeof(T)> to_byte_array(const T& in) {
 	return result;
 }
 
-
+// TODO:  memcpy() ?
 template<typename T>
 T from_byte_array(const std::array<unsigned char,sizeof(T)> *in) {
 	T result {};

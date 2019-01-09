@@ -48,7 +48,10 @@ std::string search_dict(const std::string& dict, const param_set_t& p) {
 		auto it = std::find(dict.begin()+i,dict.end(),'\n');
 
 		curr_word.clear();
-		std::copy(dict.begin()+i,it,std::back_inserter(curr_word));
+		for (int j=0; j<(it-(dict.begin()+i)); ++j) {
+			curr_word += *(dict.begin()+i+j);
+		}
+		//std::copy(dict.begin()+i,it,std::back_inserter(curr_word));
 
 		if (p.require_num_letters != 0 && curr_word.size() != p.require_num_letters) {
 			continue;
