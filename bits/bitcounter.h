@@ -31,13 +31,12 @@ int ones(T in) {
 	return count;
 };
 
-
+// TODO:  An empty struct has a size of 0?  In this case, (N-1) => unsigned overflow?
 template<typename T, int N=sizeof(T)>
 std::array<unsigned char,N> rbyteorder(T in) {
+	static_assert(N == sizeof(T));
 	unsigned char *p_in = static_cast<unsigned char*>(static_cast<void*>(&in));
-	//int n = nbytes(in);
 
-	//T result {0};
 	std::array<unsigned char,N> result {};
 	unsigned char *p_r = static_cast<unsigned char*>(static_cast<void*>(&result));
 	for (int i=(N-1); i>=0; --i) {
@@ -48,6 +47,20 @@ std::array<unsigned char,N> rbyteorder(T in) {
 	return result;
 };
 
+
+template<typename T>
+std::array<unsigned char,sizeof(T)> to_byte_array(T in) {
+	std::array<unsigned char,sizeof(T)> result {};
+	unsigned char *p_in = static_cast<unsigned char*>(static_cast<void*>(&in));
+	
+	unsigned char *p_result = &result;
+	for (int i=0; i<sizeof(T); ++i) {
+		*p_result = *p_in;
+		++p_in; ++p_result;
+	}
+
+	return result;
+}
 
 
 template<typename T>
