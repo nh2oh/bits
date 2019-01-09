@@ -49,7 +49,7 @@ std::array<unsigned char,N> rbyteorder(T in) {
 
 
 template<typename T>
-std::array<unsigned char,sizeof(T)> to_byte_array(T in) {
+std::array<unsigned char,sizeof(T)> to_byte_array(const T& in) {
 	std::array<unsigned char,sizeof(T)> result {};
 	unsigned char *p_in = static_cast<unsigned char*>(static_cast<void*>(&in));
 	
@@ -62,6 +62,19 @@ std::array<unsigned char,sizeof(T)> to_byte_array(T in) {
 	return result;
 }
 
+
+template<typename T>
+T from_byte_array(const std::array<unsigned char,sizeof(T)> *in) {
+	T result {};
+	const unsigned char *p_result = static_cast<unsigned char*>(static_cast<void*>(&result));
+	
+	for (int i=0; i<sizeof(T); ++i) {
+		*p_result = *in;
+		++in; ++p_result;
+	}
+
+	return result;
+}
 
 template<typename T>
 std::string bitprinter(T in, const char byte_sep = '|') {

@@ -159,9 +159,11 @@
   <ItemGroup>
     <ClCompile Include="bitcounter.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="wfind.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitcounter.h" />
+    <ClInclude Include="wfind.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
