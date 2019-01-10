@@ -11,7 +11,6 @@
 
 std::string load_dict(const std::filesystem::path& fp) {
 	std::ifstream f {fp,std::ios::in};
-	//f.open();
 	if (!f.is_open() || f.fail()) {
 		std::cout << "!f.is_open() || f.fail() for fp = " << fp.string() << "\n";
 		std::abort();
@@ -20,19 +19,13 @@ std::string load_dict(const std::filesystem::path& fp) {
 	// TODO:  Enforce some reasonable max size
 	std::string result {};  result.reserve(std::filesystem::file_size(fp));
 	std::string curr_line {};  result.reserve(100);
-	while (std::getline(f,curr_line,'\n')) { //(!f.eof() && !f.fail()) {
-		//std::getline(f,curr_line,'\n');
-		//curr_line += '\n';
+	while (std::getline(f,curr_line,'\n')) { 
 		result += curr_line;
 		result += '\n';
 		if (result.capacity()-result.size() < 100) {
 			result.reserve(100);
 		}
 		curr_line.clear();
-	}
-	if (f.fail()) {
-		std::cout << "f.fail() :(  Not sure why\n";
-		//std::abort();
 	}
 	f.close();
 
