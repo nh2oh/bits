@@ -62,7 +62,21 @@ std::string search_dict(const std::string& dict, const param_set_t& p) {
 	return result;
 }
 
+bool is_hangman_set(std::string word, std::string letters) {
+	std::string::iterator it_letters_beg = letters.begin();
+	std::string::iterator it_word = word.begin();
+	while (it_word!=word.end() && it_letters_beg!=letters.end()) {
+		auto it = std::find(it_letters_beg,letters.end(),*it_word);
+		if (it == letters.end()) { 
+			return false;
+		}
+		std::iter_swap(it,it_letters_beg);
+		++it_letters_beg;
+		++it_word;
+	}
 
+	return it_word == word.end();
+}
 
 
 
