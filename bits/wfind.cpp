@@ -41,32 +41,29 @@ std::string load_dict(const std::filesystem::path& fp) {
 
 
 std::string search_dict(const std::string& dict, const param_set_t& p) {
-	std::string result {};
+	std::string result {};  result.reserve(5000);
 
-	std::string curr_word {};  curr_word.reserve(100);
-	for (int i=0; i<dict.size(); i+=curr_word.size()) {
-		auto it = std::find(dict.begin()+i,dict.end(),'\n');
+	// returns true if c is not in the permitted set
+	auto char_not_allowed = [&p](const char c) -> bool {
+		return std::find(p.permit_only.begin(),p.permit_only.end(),c)==p.permit_only.end();
+	};
 
-		curr_word.clear();
-		for (int j=0; j<(it-(dict.begin()+i)); ++j) {
-			curr_word += *(dict.begin()+i+j);
-		}
-		//std::copy(dict.begin()+i,it,std::back_inserter(curr_word));
+	for (auto it=dict.begin(); it!=dict.end(); ++it) {
+		auto it_beg = it;
+		it = std::find(it_beg,dict.end(),'\n');
 
-		if (p.require_num_letters != 0 && curr_word.size() != p.require_num_letters) {
+		if (p.require_num_letters != 0 && (it-it_beg) != p.require_num_letters) {
 			continue;
 		}
 
 		if (p.permit_only.size() > 0) {
-			auto it_forbidden = std::find_first_of(curr_word.begin(),curr_word.end(),
-				p.permit_only.begin(),p.permit_only.end());
-			if (it_forbidden != curr_word.end()) {
-				continue;
+			auto it_forbidden = std::find_if(it_beg,it,char_not_allowed);
+			if (it_forbidden != it) {
+				continue;  // *it_forbidden in [it_beg,it) is not in p.permit_only
 			}
 		}
 
-		result += curr_word;
-		result += '\n';
+		std::copy(it_beg,it+1,std::back_inserter(result));
 	}
 
 	return result;
