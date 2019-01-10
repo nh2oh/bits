@@ -1,5 +1,4 @@
 #include "wfind.h"
-#include <vector>
 #include <string>
 #include <filesystem>
 #include <algorithm>
@@ -36,7 +35,7 @@ std::string load_dict(const std::filesystem::path& fp) {
 std::string search_dict(const std::string& dict, const param_set_t& p) {
 	std::string result {};  result.reserve(5000);
 
-	// returns true if c is not in the permitted set
+	// returns true if c is _not_ in the permitted set
 	auto char_not_allowed = [&p](const char c) -> bool {
 		return std::find(p.permit_only.begin(),p.permit_only.end(),c)==p.permit_only.end();
 	};
@@ -62,9 +61,15 @@ std::string search_dict(const std::string& dict, const param_set_t& p) {
 	return result;
 }
 
-bool is_hangman_set(std::string word, std::string letters) {
+
+// True if 'word' can be made from the letters in 'letters' using each letter in 'letters'
+// no more than once.  The same letter in 'letters' may appear more than once.  
+//
+// Another way:  is_permutation(set_intersection()); 
+//
+bool is_hangman_set(const std::string& word, std::string letters) {
 	std::string::iterator it_letters_beg = letters.begin();
-	std::string::iterator it_word = word.begin();
+	std::string::const_iterator it_word = word.cbegin();
 	while (it_word!=word.end() && it_letters_beg!=letters.end()) {
 		auto it = std::find(it_letters_beg,letters.end(),*it_word);
 		if (it == letters.end()) { 
