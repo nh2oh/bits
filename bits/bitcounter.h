@@ -19,9 +19,9 @@ int ones(T in) {
 	unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&in));
 
 	int count {0};
-	for (int i=0; i<sizeof(T)/sizeof(unsigned char); ++i) {
-		char mask {1};
-		for (int j=0; j<8; ++j) {
+	for (int i=0; i<sizeof(T); ++i) {
+		unsigned char mask {1};
+		for (int j=0; j<nbits(in); ++j) {
 			if (mask & *p) { ++count; }
 			mask = mask << 1;
 		}
@@ -31,21 +31,25 @@ int ones(T in) {
 	return count;
 };
 
-// TODO:  An empty struct has a size of 0?  In this case, (N-1) => unsigned overflow?
-template<typename T, int N=sizeof(T)>
-std::array<unsigned char,N> rbyteorder(T in) {
-	static_assert(N == sizeof(T));
-	unsigned char *p_in = static_cast<unsigned char*>(static_cast<void*>(&in));
+int tests_ones();
 
-	std::array<unsigned char,N> result {};
+
+template<typename T>
+std::array<unsigned char,sizeof(T)> rbyteorder(T in) {
+	unsigned char *p_in = static_cast<unsigned char*>(static_cast<void*>(&in));
+	std::array<unsigned char,sizeof(T)> result {};
+
 	unsigned char *p_r = static_cast<unsigned char*>(static_cast<void*>(&result));
-	for (int i=(N-1); i>=0; --i) {
-		*p_r = *(p_in+i);
+	for (int i=0; i<sizeof(T); ++i) {
+		*p_r = *(p_in+sizeof(T)-1-i);
 		++p_r;
 	}
 
 	return result;
 };
+
+int tests_rbyteorder();
+
 
 // TODO:  memcpy() ?
 template<typename T>
@@ -62,7 +66,6 @@ std::array<unsigned char,sizeof(T)> to_byte_array(const T& in) {
 	return result;
 }
 
-// TODO:  memcpy() ?
 template<typename T>
 T from_byte_array(const std::array<unsigned char,sizeof(T)> *in) {
 	T result {};
@@ -82,10 +85,10 @@ std::string bitprinter(T in, const char byte_sep = '|') {
 
 	std::string s {};  s.reserve(nbits(in));
 	for (int i=0; i<nbytes(in); ++i) {
-		unsigned char mask {1};
+		unsigned char mask {0x80};
 		for (int j=0; j<nbits(mask); ++j) {
 			s += (mask & *p) ? '1' : '0';
-			mask = mask << 1;
+			mask = mask >> 1;
 		}
 		s += byte_sep;
 		++p;
@@ -93,5 +96,7 @@ std::string bitprinter(T in, const char byte_sep = '|') {
 
 	return s;
 };
+
+int tests_bitprinter();
 
 
