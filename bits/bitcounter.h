@@ -56,7 +56,6 @@ int tests_rbyteorder();
 template<typename T>
 T swap_bits(T in, size_t i, size_t j) {
 	static_assert(sizeof(T)>0 || (sizeof(T)==0 && i==0 && j==0));
-	//static_assert(i<nbits(in) && j<nbits(in) && i>=0 && j>=0);
 	if (i>nbits(in)-1 || j>nbits(in)-1 || i<0 || j<0) {
 		std::cout << "swap_bits(T in, int8_t i, int8_t j):  "
 			<< "i>nbits(T)-1 || j>nbits(T)-1 || i<0 || j<0.  \n"
