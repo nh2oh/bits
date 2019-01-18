@@ -24,3 +24,30 @@ It evens_to_front(It beg, It end) {
 
 int test_evens_to_front();
 
+
+
+
+template<typename It>
+It dnfp(It beg, It end, It pvt) {
+	auto pvt_v = *pvt;
+	It lt_end = beg;
+	while (beg != end) {
+		if (*beg < pvt_v) {
+			std::iter_swap(beg,lt_end);
+			++lt_end;
+		}
+		if (*beg == pvt_v) {
+			std::iter_swap(beg,pvt);
+			++pvt;
+		}
+		++beg;
+	}
+
+	return pvt;
+}
+
+int test_dnfp();
+
+
+
+

@@ -74,4 +74,71 @@ int test_evens_to_front() {
 
 
 
+int test_dnfp() {
+	
+	// No repeats, already sorted
+	/*std::vector<int> a {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
+	auto a_dnfp = dnfp(a.begin(),a.end(),a.begin()+4);
+
+	for (std::vector<int>::iterator it = a.begin(); it != a.end(); ++it) {
+		std::cout << *it;
+		if (it == a_dnfp) {
+			std::cout << "*, ";
+		} else {
+			std::cout << ", ";
+		}
+	} 
+	std::cout << "\n\n";*/
+
+
+	// All values even
+	std::vector<int> b {0,2,2,14,4,52,6,72,8,90,10,0,12,4};
+	//std::vector<int> b {0,0,2,14,4,52,6,72,8,90,10,2,12,4};
+	//for (std::vector<int>::iterator it_pvt = b.begin(); it_pvt!=b.end(); ++it_pvt) {
+	for (int it_pvt = 0; it_pvt<b.size(); ++it_pvt) {
+		auto b_dnfp = dnfp(b.begin(),b.end(),b.begin()+it_pvt);
+		
+		for (std::vector<int>::iterator it=b.begin(); it!=b.end(); ++it) {
+			std::cout << *it;
+			if (it == b_dnfp) {
+				std::cout << "*, ";
+			} else {
+				std::cout << ", ";
+			}
+		}
+		std::cout << "\n\n";
+	}
+
+
+
+	/*
+	// No values even
+	std::vector<int> c {1,1,3,5,3,55,7,77,9,89,11,1,11,41};
+	auto c_ev_end = evens_to_front(c.begin(),c.end());
+	for (std::vector<int>::iterator it = c.begin(); it != c.end(); ++it) {
+		std::cout << *it;
+		if (it == c_ev_end) {
+			std::cout << "*, ";
+		} else {
+			std::cout << ", ";
+		}
+	}
+	std::cout << "\n\n";
+
+	// Empty vector
+	std::vector<int> d {};
+	auto d_ev_end = evens_to_front(d.begin(),d.end());
+	for (std::vector<int>::iterator it = d.begin(); it != d.end(); ++it) {
+		std::cout << *it;
+		if (it == d_ev_end) {
+			std::cout << "*, ";
+		} else {
+			std::cout << ", ";
+		}
+	}
+	std::cout << "\n\n";
+	*/
+
+	return 0;
+}
 
