@@ -31,23 +31,22 @@ template<typename It>
 It dnfp(It beg, It end, It pvt) {
 	auto pvt_v = *pvt;
 	It lt_end = beg;
-	It curr = beg;
-	while (curr != end) {
-		if (*curr < pvt_v) {
-			std::iter_swap(curr,lt_end);
+	while (beg != end) {
+		if (*beg < pvt_v) {
+			std::iter_swap(beg,lt_end);
 			++lt_end;
 		}
-		if (*curr == pvt_v) {
-			std::iter_swap(curr,pvt);
+		if (*beg == pvt_v) {
+			std::iter_swap(beg,pvt);
 			++pvt;
 		}
-		++curr;
+		++beg;
 	}
 
-	return end;
+	return pvt;
 }
 
-
+int test_dnfp();
 
 
 
