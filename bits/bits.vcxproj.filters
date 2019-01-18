@@ -27,6 +27,9 @@
     <ClCompile Include="evens_to_front.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fmtgp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitcounter.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="evens_to_front.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fmtgp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
