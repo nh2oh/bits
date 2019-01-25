@@ -30,6 +30,9 @@
     <ClCompile Include="fmtgp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="exvol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitcounter.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="fmtgp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="exvol.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

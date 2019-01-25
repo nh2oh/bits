@@ -162,36 +162,5 @@ int test_dnfp() {
 
 	return 0;
 
-
-
-	/*
-	// No values even
-	std::vector<int> c {1,1,3,5,3,55,7,77,9,89,11,1,11,41};
-	auto c_ev_end = evens_to_front(c.begin(),c.end());
-	for (std::vector<int>::iterator it = c.begin(); it != c.end(); ++it) {
-		std::cout << *it;
-		if (it == c_ev_end) {
-			std::cout << "*, ";
-		} else {
-			std::cout << ", ";
-		}
-	}
-	std::cout << "\n\n";
-
-	// Empty vector
-	std::vector<int> d {};
-	auto d_ev_end = evens_to_front(d.begin(),d.end());
-	for (std::vector<int>::iterator it = d.begin(); it != d.end(); ++it) {
-		std::cout << *it;
-		if (it == d_ev_end) {
-			std::cout << "*, ";
-		} else {
-			std::cout << ", ";
-		}
-	}
-	std::cout << "\n\n";
-	*/
-
-	//return 0;
 }
 
