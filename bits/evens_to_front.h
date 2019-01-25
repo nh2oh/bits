@@ -25,7 +25,18 @@ It evens_to_front(It beg, It end) {
 int test_evens_to_front();
 
 
-
+//
+// Each iteration:
+// - curr is incremented exactly once
+// - lt_end is incremented not more than once
+// - pvt_end is incemented s.t. pvt_end >= lt_end
+//
+// Invariants @ the start of each iteration:
+// - lt_end <= curr
+// - pvt_end <= curr
+// - pvt_end >= lt_end
+//
+//
 
 template<typename It>
 It dnfp(It beg, It end, It pvt) {
@@ -50,6 +61,7 @@ It dnfp(It beg, It end, It pvt) {
 
 	return end;
 }
+
 
 int test_dnfp();
 
