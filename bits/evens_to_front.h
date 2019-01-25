@@ -31,19 +31,24 @@ template<typename It>
 It dnfp(It beg, It end, It pvt) {
 	auto pvt_v = *pvt;
 	It lt_end = beg;
-	while (beg != end) {
-		if (*beg < pvt_v) {
-			std::iter_swap(beg,lt_end);
+	It pvt_end = beg;
+	It curr = beg;
+	while (curr != end) {
+		if (*curr < pvt_v) {
+			std::iter_swap(curr,lt_end);
 			++lt_end;
+			if (pvt_end < lt_end) {
+				pvt_end = lt_end;
+			}
 		}
-		if (*beg == pvt_v) {
-			std::iter_swap(beg,pvt);
-			++pvt;
+		if (*curr == pvt_v) {
+			std::iter_swap(curr,pvt_end);
+			++pvt_end;
 		}
-		++beg;
+		++curr;
 	}
 
-	return pvt;
+	return end;
 }
 
 int test_dnfp();

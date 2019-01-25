@@ -1,6 +1,6 @@
 #include "evens_to_front.h"
 #include <iostream>
-
+#include <string>
 
 int test_evens_to_front() {
 	
@@ -75,7 +75,24 @@ int test_evens_to_front() {
 
 
 int test_dnfp() {
-	
+	std::cout << "---------------------------------------------------\n"
+		<< "test_dnfp(): \n";
+
+	auto printvec = [](const std::vector<int>& v, int idx_star=-1){ 
+		std::string s {};
+		for (const auto& e : v) {
+			s += std::to_string(e);
+			if (idx_star==0) {
+				s += '*';
+			}
+			s += ',';
+			--idx_star;
+		};
+		s.pop_back();
+		s += ';';
+		return s;
+	};
+
 	// No repeats, already sorted
 	/*std::vector<int> a {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
 	auto a_dnfp = dnfp(a.begin(),a.end(),a.begin()+4);
@@ -92,22 +109,16 @@ int test_dnfp() {
 
 
 	// All values even
-	std::vector<int> b {0,2,2,14,4,52,6,72,8,90,10,0,12,4};
-	//std::vector<int> b {0,0,2,14,4,52,6,72,8,90,10,2,12,4};
-	//for (std::vector<int>::iterator it_pvt = b.begin(); it_pvt!=b.end(); ++it_pvt) {
-	for (int it_pvt = 0; it_pvt<b.size(); ++it_pvt) {
-		auto b_dnfp = dnfp(b.begin(),b.end(),b.begin()+it_pvt);
-		
-		for (std::vector<int>::iterator it=b.begin(); it!=b.end(); ++it) {
-			std::cout << *it;
-			if (it == b_dnfp) {
-				std::cout << "*, ";
-			} else {
-				std::cout << ", ";
-			}
-		}
-		std::cout << "\n\n";
+	std::vector<int> b_init {0,2,2,14,4,52,6,72,8,90,10,0,12,4};
+	for (int idx_pvt=0; idx_pvt<b_init.size(); ++idx_pvt) {
+		std::cout << "b_init = " << printvec(b_init,idx_pvt) << "\n";
+		auto b = b_init;
+		auto b_dnfp = dnfp(b.begin(),b.end(),b.begin()+idx_pvt);
+		std::cout << printvec(b);
+		std::cout << std::endl << std::endl;
 	}
+
+	return 0;
 
 
 
@@ -139,6 +150,6 @@ int test_dnfp() {
 	std::cout << "\n\n";
 	*/
 
-	return 0;
+	//return 0;
 }
 
