@@ -119,7 +119,8 @@ enum class atom_t : uint8_t {
 // Lookup table that returns the radius for the given atom_t
 double radius(const atom_t&);
 
-struct xyz_type_t {
+// "xyz atom"
+struct xyza_t {
 	double x {0.0};
 	double y {0.0};
 	double z {0.0};
@@ -136,13 +137,14 @@ struct vec3_dist_t {
 	double dist {0.0};
 };
 
-bool overlap(const std::vector<xyz_type_t>&, const std::vector<xyz_type_t>&);
+bool overlap(const std::vector<xyza_t>&, const std::vector<xyza_t>&);
 
-double dsq(const xyz_type_t&, const xyz_type_t&);
+double dsq(const xyza_t&, const xyza_t&);
 
-bool center(std::vector<xyz_type_t>::iterator, std::vector<xyz_type_t>::iterator);
-bool rotate(std::vector<xyz_type_t>::iterator, std::vector<xyz_type_t>::iterator, vec3_angle_t);
-bool shift(std::vector<xyz_type_t>::iterator, std::vector<xyz_type_t>::iterator, vec3_dist_t);
+bool center(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator);
+bool rotate(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator, vec3_angle_t);
 
+matrix<double,3,3> make_3d_rotm(std::array<double,3>, double);
+bool shift3d(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator, vec3_dist_t);
 double norm3d(std::array<double,3>::iterator, std::array<double,3>::iterator);
 

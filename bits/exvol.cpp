@@ -20,7 +20,7 @@ double radius(const atom_t& a) {
 // - Lookup table for std::pow(radius(a[i].atom)+radius(b[j].atom),2) for all radius pairs
 // - Presort?
 // - Only compute dsq(a[i],b[j]) if there might plausibly be a clash
-bool overlap(const std::vector<xyz_type_t>& a, const std::vector<xyz_type_t>& b) {
+bool overlap(const std::vector<xyza_t>& a, const std::vector<xyza_t>& b) {
 	for (int i=0; i<a.size(); ++i) {
 		for (int j=0; j<b.size(); ++j) {
 			double min_dist_sq = std::pow(radius(a[i].atom)+radius(b[j].atom),2);
@@ -38,7 +38,7 @@ bool overlap(const std::vector<xyz_type_t>& a, const std::vector<xyz_type_t>& b)
 // extend in direction -d for d ~ {x,y,z}.  
 // "Maximum extent" in x is the atom for which the quantity x + 0.5*r is larger than that for
 // all others.  Ie, the radius is included in the dfn of "maximum extent."  
-bool center(std::vector<xyz_type_t>::iterator beg, std::vector<xyz_type_t>::iterator end) {
+bool center(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator end) {
 	double max_x {0.0};
 	double max_y {0.0};
 	double max_z {0.0};
@@ -84,8 +84,8 @@ bool center(std::vector<xyz_type_t>::iterator beg, std::vector<xyz_type_t>::iter
 }
 
 
-bool rotate(std::vector<xyz_type_t>::iterator beg, std::vector<xyz_type_t>::iterator end, vec3_angle_t rv) {
-	norm3d(rv.v.begin(),rv.v.end());
+bool rotate(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator end, vec3_angle_t rv) {
+	/*norm3d(rv.v.begin(),rv.v.end());
 	double rv_x = rv.v[0];
 	double rv_y = rv.v[1];
 	double rv_z = rv.v[2];
@@ -98,24 +98,49 @@ bool rotate(std::vector<xyz_type_t>::iterator beg, std::vector<xyz_type_t>::iter
 	std::array<double,3> Rz {t*rv_x*rv_z-s*rv_y, t*rv_y*rv_z+s*rv_x, t*std::pow(rv_z,2)+c};
 
 	// matrix-1d-times-vector-1d
-	auto m1dv1d = [](const std::array<double,3>& lhs, const xyz_type_t& v) -> double {
+	auto m1dv1d = [](const std::array<double,3>& lhs, const xyza_t& v) -> double {
 		return lhs[0]*v.x + lhs[1]*v.y + lhs[2]*v.z;
 	};
 
 	for (auto it_curr=beg; it_curr!=end; ++it_curr) {
 		auto curr = *it_curr;
-		xyz_type_t curr_rotated {curr};
+		xyza_t curr_rotated {curr};
 		curr_rotated.x = m1dv1d(Rx,curr);
 		curr_rotated.y = m1dv1d(Ry,curr);
 		curr_rotated.z = m1dv1d(Rz,curr);
 		*it_curr = curr_rotated;
+	}*/
+
+	auto rm = make_3d_rotm(rv.v,rv.theta);
+	for (auto it_curr=beg; it_curr!=end; ++it_curr) {
+		std::array<double,3> curr_v {(*it_curr).x,(*it_curr).y,(*it_curr).z};
+		curr_v = rm*curr_v;
+		xyza_t curr_result {curr_v[0],curr_v[1],curr_v[2],(*it_curr).atom};
+		*it_curr = curr_result;
 	}
 
 	return true;
 }
 
 
-bool shift(std::vector<xyz_type_t>::iterator beg, std::vector<xyz_type_t>::iterator end, vec3_dist_t sv) {
+matrix<double,3,3> make_3d_rotm(std::array<double,3> v, double theta) {
+	matrix<double,3,3> result {};
+	norm3d(v.begin(),v.end());
+	double c = std::cos(theta);
+	double s = std::sin(theta);
+	double t = 1.0 - std::cos(theta);
+	//std::array<double,3> Rx {t*std::pow(v[0],2)+c, t*v[0]*v[1]-s*v[2], t*v[0]*v[2]+s*v[1]};
+	//std::array<double,3> Ry {t*v[0]*v[1]+s*v[2], t*std::pow(v[1],2)+c, t*v[1]*v[2]-s*v[0]};
+	//std::array<double,3> Rz {t*v[0]*v[2]-s*v[1], t*v[1]*v[2]+s*v[0], t*std::pow(v[2],2)+c};
+	result.setrow(0, std::array<double,3> {t*std::pow(v[0],2)+c, t*v[0]*v[1]-s*v[2], t*v[0]*v[2]+s*v[1]});
+	result.setrow(1, std::array<double,3> {t*v[0]*v[1]+s*v[2], t*std::pow(v[1],2)+c, t*v[1]*v[2]-s*v[0]});
+	result.setrow(2, std::array<double,3> {t*v[0]*v[2]-s*v[1], t*v[1]*v[2]+s*v[0], t*std::pow(v[2],2)+c});
+
+	return result;
+}
+
+
+bool shift3d(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator end, vec3_dist_t sv) {
 	norm3d(sv.v.begin(),sv.v.end());
 	double sv_x = (sv.dist)*sv.v[0];
 	double sv_y = (sv.dist)*sv.v[1];
@@ -134,7 +159,7 @@ bool shift(std::vector<xyz_type_t>::iterator beg, std::vector<xyz_type_t>::itera
 
 
 // Square of the distance between a, b
-double dsq(const xyz_type_t& a, const xyz_type_t& b) {
+double dsq(const xyza_t& a, const xyza_t& b) {
 	return std::pow((a.x-b.x),2) + std::pow((a.x-b.x),2) + std::pow((a.x-b.x),2);
 }
 
