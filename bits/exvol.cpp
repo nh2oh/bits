@@ -2,6 +2,7 @@
 #include <cmath>  // std::pow()
 #include <algorithm>  // std::max()
 #include <array>
+#include <random>
 
 double radius(const atom_t& a) {
 	switch (a) {
@@ -15,6 +16,69 @@ double radius(const atom_t& a) {
 
 	return 0.0;
 }
+
+
+
+exvol_result_t exvol(std::vector<xyza_t>::iterator a_beg, std::vector<xyza_t>::iterator a_end,
+				std::vector<xyza_t>::iterator b_beg, std::vector<xyza_t>::iterator b_end,
+				int n) {
+
+	auto v3d_subtract = [](const std::array<double,3>& a, const std::array<double,3>& b) 
+					-> std::array<double,3> {
+		return std::array<double,3> {a[0]-b[0],a[1]-b[1],a[2]-b[2]};
+	};
+	auto v3d_add = [](const std::array<double,3>& a, const std::array<double,3>& b) 
+					-> std::array<double,3> {
+		return std::array<double,3> {a[0]+b[0],a[1]+b[1],a[2]+b[2]};
+	};
+
+	center(a_beg,a_end);
+	center(b_beg,b_end);
+
+	auto max_dims_a = max_dimensions(a_beg,a_end);
+	double length_a = std::max({max_dims_a[0],max_dims_a[1],max_dims_a[2]});
+	auto max_dims_b = max_dimensions(b_beg,b_end);
+	double length_b = std::max({max_dims_b[0],max_dims_b[1],max_dims_b[2]});
+	double r_sphere = 0.5*(length_a + length_b);  // TODO:  The matlab versions adds a small fudge fctr
+
+	std::random_device rd {};
+	std::default_random_engine re {rd};
+	std::uniform_real_distribution rd_angle {};
+	std::uniform_real_distribution rd_center {-1*r_sphere,r_sphere};
+	
+	std::array<double,3> rand_shift_vec {};
+	for (int i=0; i<n; ++i) {
+
+		if (i%1000 == 0) {
+			std::array<double,3> rand_rotation_vec {rd(re),rd(re),rd(re)};
+			//matrix<double,3,3> rand_rotation_mtrx = make_3d_rotm(rand_rotation_vec, rd(re));
+			rotate(a_beg, a_end, vec3_angle_t {rand_rotation_vec,rd(re)});
+		}
+
+		rand_shift_vec = v3d_subtract({rd_center(re),rd_center(re),rd_center(re)},rand_shift_vec);
+		shift_by(a_beg,a_end,rand_shift_vec);
+
+		bool collide {false};
+		for (auto it_a=a_beg; it_a!=a_end; ++it_a) {
+			for (auto it_b=b_beg; it_b!=b_end; ++it_b) {
+				if (overlap(*it_a,*it_b)) {
+					collide = true;
+					break;
+				}
+			}
+			if (collide) {
+				++n_collide;
+				collide = false;
+				break;  // To next shift-rotate
+			}
+		}  // To next atom in a
+	}  // To next shift-rotate
+
+	double v_box = (4.0/3.0)*3.14159*std::pow(r_sphere,3);
+	double v_ex = (static_cast<double>(n)/static_cast<double>(n_collide))*v_box;
+	exvol_result_t result {n,n_collide,v_box,v_ex};
+}
+
 
 // TODO:
 // - Lookup table for std::pow(radius(a[i].atom)+radius(b[j].atom),2) for all radius pairs
@@ -32,6 +96,32 @@ bool overlap(const std::vector<xyza_t>& a, const std::vector<xyza_t>& b) {
 
 	return false;
 }
+
+
+// "Maximum extent" in x is the atom for which the quantity x + 0.5*r is larger than that for
+// all others.  Ie, the radius is included in the dfn of "maximum extent."  
+std::array<double,3> max_dimensions(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator end) {
+	double max_x {0.0};
+	double max_y {0.0};
+	double max_z {0.0};
+	double min_x {0.0};
+	double min_y {0.0};
+	double min_z {0.0};
+
+	for (auto it_curr=beg; it_curr!=end; ++it_curr) {
+		max_x = std::max(max_x, (*it_curr).x+0.5*radius((*it_curr).atom));
+		min_x = std::min(min_x, (*it_curr).x-0.5*radius((*it_curr).atom));
+
+		max_y = std::max(max_y, (*it_curr).y+0.5*radius((*it_curr).atom));
+		min_y = std::min(min_y, (*it_curr).y-0.5*radius((*it_curr).atom));
+
+		max_z = std::max(max_z, (*it_curr).z+0.5*radius((*it_curr).atom));
+		min_z = std::min(min_z, (*it_curr).z-0.5*radius((*it_curr).atom));
+	}
+
+	return std::array<double,3> {std::abs(max_x-min_x),std::abs(max_y-min_y),std::abs(max_z-min_z)};
+}
+
 
 
 // Shift the input vector along (x,y,z) s.t. its maximum extent in direction d == its maximum
@@ -139,7 +229,17 @@ matrix<double,3,3> make_3d_rotm(std::array<double,3> v, double theta) {
 	return result;
 }
 
+/*
+// Shift _to_
+bool shift3d(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator end, vec3_dist_t sv) {
+	norm3d(sv.v.begin(),sv.v.end());
+	double sv_x = (sv.dist)*sv.v[0];
+	double sv_y = (sv.dist)*sv.v[1];
+	double sv_z = (sv.dist)*sv.v[2];
+	*/
 
+// Shift _by_
+// TODO:  Very stupid... drop the call to norm()
 bool shift3d(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator end, vec3_dist_t sv) {
 	norm3d(sv.v.begin(),sv.v.end());
 	double sv_x = (sv.dist)*sv.v[0];

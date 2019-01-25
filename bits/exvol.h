@@ -4,7 +4,7 @@
 #include <exception>
 
 //
-// Very crude non-allocating matrix
+// Very crude non-allocating 2d matrix
 //
 template<typename T, int Nr, int Nc>
 class matrix {
@@ -147,4 +147,18 @@ bool rotate(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator, vec3_a
 matrix<double,3,3> make_3d_rotm(std::array<double,3>, double);
 bool shift3d(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator, vec3_dist_t);
 double norm3d(std::array<double,3>::iterator, std::array<double,3>::iterator);
+
+struct exvol_result_t {
+	int n_test {0};
+	int n_collide {0};
+	double v_box {0.0};
+	double v_ex {0.0};
+};
+exvol_result_t exvol(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator,
+	std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator,
+	int);
+
+
+
+
 
