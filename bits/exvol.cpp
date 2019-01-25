@@ -156,3 +156,7 @@ double norm3d(std::array<double,3>::iterator beg, std::array<double,3>::iterator
 
 	return len;
 }
+
+
+
+
