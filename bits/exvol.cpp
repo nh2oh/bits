@@ -4,6 +4,7 @@
 #include <array>
 #include <random>
 
+/*
 double radius(const atom_t& a) {
 	switch (a) {
 		case atom_t::c:  return 1.7;
@@ -172,8 +173,8 @@ bool center(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator end
 
 	return true;
 }
-
-
+*/
+/*
 bool rotate(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator end, vec3_angle_t rv) {
 	/*norm3d(rv.v.begin(),rv.v.end());
 	double rv_x = rv.v[0];
@@ -199,7 +200,7 @@ bool rotate(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator end
 		curr_rotated.y = m1dv1d(Ry,curr);
 		curr_rotated.z = m1dv1d(Rz,curr);
 		*it_curr = curr_rotated;
-	}*/
+	}*//*
 
 	auto rm = make_3d_rotm(rv.v,rv.theta);
 	for (auto it_curr=beg; it_curr!=end; ++it_curr) {
@@ -228,7 +229,7 @@ matrix<double,3,3> make_3d_rotm(std::array<double,3> v, double theta) {
 
 	return result;
 }
-
+*/
 /*
 // Shift _to_
 bool shift3d(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator end, vec3_dist_t sv) {
@@ -237,7 +238,7 @@ bool shift3d(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator en
 	double sv_y = (sv.dist)*sv.v[1];
 	double sv_z = (sv.dist)*sv.v[2];
 	*/
-
+/*
 // Shift _by_
 // TODO:  Very stupid... drop the call to norm()
 bool shift3d(std::vector<xyza_t>::iterator beg, std::vector<xyza_t>::iterator end, vec3_dist_t sv) {
@@ -282,6 +283,6 @@ double norm3d(std::array<double,3>::iterator beg, std::array<double,3>::iterator
 	return len;
 }
 
-
+*/
 
 

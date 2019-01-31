@@ -1,6 +1,8 @@
 #include "evens_to_front.h"
 #include <iostream>
 #include <string>
+#include <array>
+#include <vector>
 
 int test_evens_to_front() {
 	
@@ -71,7 +73,6 @@ int test_evens_to_front() {
 
 	return 0;
 }
-
 
 
 int test_dnfp() {
@@ -162,5 +163,42 @@ int test_dnfp() {
 
 	return 0;
 
+}
+
+
+bool test_inc_dec_arry() {
+	struct tests_four_t {
+		std::array<int,4> test {0,0,0,0};
+		std::array<int,4> ans {0,0,0,0};
+		bool ans_retval {false};
+	};
+	std::vector<tests_four_t> tests_four {
+		{{0,0,0,0},{0,0,0,1},true},
+		{{0,0,0,9},{0,0,1,0},true},
+		{{0,0,9,9},{0,1,0,0},true},
+		{{0,9,9,9},{1,0,0,0},true},
+		{{9,9,9,9},{0,0,0,0},false},
+
+		{{1,2,3,4},{1,2,3,5},true},
+		{{4,3,2,1},{4,3,2,2},true},
+		{{1,1,8,9},{1,1,9,0},true},
+	};
+	
+	for (const auto& e : tests_four) {
+		std::array<int,4> curr_test_result = e.test;
+		bool curr_test_retval = inc_dec_arry(curr_test_result.begin(),curr_test_result.end());
+		if (curr_test_retval != e.ans_retval) {
+			std::cout << "test_inc_dec_arry():  curr_test_retval != e.ans_retval  TEST FAILED!" << std::endl;
+			return false;
+		}
+
+		if (curr_test_result != e.ans) {
+			std::cout << "test_inc_dec_arry():  curr_test_result != e.ans  TEST FAILED!" << std::endl;
+			return false;
+		}
+	}
+
+	std::cout << "test_inc_dec_arry():  All tests passed!" << std::endl;
+	return true;
 }
 

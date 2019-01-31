@@ -66,10 +66,12 @@ int test_dnfp();
 
 
 // Returns true on success, false on overflow
-template<typename It, typename T>
+template<typename It>
 bool inc_dec_arry(It beg, It end) {
 	bool carry {false};
-	for (--end; end!=beg; --end) {
+
+	while (end != beg) {
+		--end;
 		if (*end < 9) {
 			*end += 1;
 			carry = false;

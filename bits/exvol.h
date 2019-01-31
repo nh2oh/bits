@@ -3,6 +3,7 @@
 #include <array>
 #include <exception>
 
+/*
 //
 // Very crude non-allocating 2d matrix
 //
@@ -159,6 +160,6 @@ exvol_result_t exvol(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterato
 	int);
 
 
-
+	*/
 
 
