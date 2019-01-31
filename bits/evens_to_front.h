@@ -37,7 +37,6 @@ int test_evens_to_front();
 // - pvt_end >= lt_end
 //
 //
-
 template<typename It>
 It dnfp(It beg, It end, It pvt) {
 	auto pvt_v = *pvt;
@@ -65,6 +64,26 @@ It dnfp(It beg, It end, It pvt) {
 
 int test_dnfp();
 
+
+// Returns true on success, false on overflow
+template<typename It, typename T>
+bool inc_dec_arry(It beg, It end) {
+	bool carry {false};
+	for (--end; end!=beg; --end) {
+		if (*end < 9) {
+			*end += 1;
+			carry = false;
+			break;
+		} else {
+			carry = true;
+			*end = 0;
+		}
+	}
+
+	return !carry;
+}
+
+bool test_inc_dec_arry();
 
 
 
