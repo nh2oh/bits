@@ -64,7 +64,7 @@ It dnfp(It beg, It end, It pvt) {
 
 int test_dnfp();
 
-
+// Increment by 1 a decimal "number" represented as an array with each element a digit on [0,9].  
 // Returns true on success, false on overflow
 template<typename It>
 bool inc_dec_arry(It beg, It end) {
@@ -86,6 +86,36 @@ bool inc_dec_arry(It beg, It end) {
 }
 
 bool test_inc_dec_arry();
+
+
+// Multiply two N-digit "numbers" represented as arrays with each element a digit on [0,9].  
+// Returns true on success, false on overflow
+template<int N>
+std::array<int,N> mult_dec_arrys(const std::array<int,N>& lhs, const std::array<int,N>& rhs) {
+	static_assert(N>=1);
+
+	// actually gets the most_sig dig
+	auto least_sig_dec_dig = [](int d) -> int {
+		pten = 1;
+		while (d/pten > 9) {
+			pten *=10;
+		}
+		return d/pten;
+	};
+
+	int carry {0};
+	std::array<int,N> result = rhs;
+	for (int i=N-1; i>=0; --i) {
+		int curr = (rhs[i]*lhs[i])+carry;
+		result[i] = least_sig_dec_dig(curr);
+		carry = most_sig_dec_dig(curr);
+	}
+
+	return carry!=0;
+}
+
+
+
 
 
 
