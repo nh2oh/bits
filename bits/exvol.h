@@ -106,6 +106,27 @@ public:
 		}
 		return result;
 	};
+	// Ma += Mb
+	std::array<T,Nr,Nc>& operator+=(const std::array<T,Nr,Nc>& lhs) {
+		for (int r=0; r<Nr; ++r) {
+			for (int c=0; c<Nc; ++c) {
+				data[r*Nc + c] += lhs[r*Nc + c];
+			}
+		}
+		return this;
+	};
+	// Ma -= Mb
+	std::array<T,Nr,Nc>& operator-=(const std::array<T,Nr,Nc>& lhs) {
+		for (int r=0; r<Nr; ++r) {
+			for (int c=0; c<Nc; ++c) {
+				data[r*Nc + c] -= lhs[r*Nc + c];
+			}
+		}
+		return this;
+	};
+
+
+
 
 	std::array<T,Nr*Nc> data {};
 };
