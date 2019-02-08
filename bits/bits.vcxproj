@@ -93,7 +93,7 @@
     <ClCompile Include="bitcounter.cpp" />
     <ClCompile Include="evens_to_front.cpp" />
     <ClCompile Include="exvol.cpp" />
-    <ClCompile Include="fmtgp.cpp" />
+    <ClCompile Include="classics.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="wfind.cpp" />
   </ItemGroup>
@@ -101,7 +101,7 @@
     <ClInclude Include="bitcounter.h" />
     <ClInclude Include="evens_to_front.h" />
     <ClInclude Include="exvol.h" />
-    <ClInclude Include="fmtgp.h" />
+    <ClInclude Include="classics.h" />
     <ClInclude Include="wfind.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

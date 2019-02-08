@@ -27,10 +27,10 @@
     <ClCompile Include="evens_to_front.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fmtgp.cpp">
+    <ClCompile Include="exvol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="exvol.cpp">
+    <ClCompile Include="classics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,10 +44,10 @@
     <ClInclude Include="evens_to_front.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fmtgp.h">
+    <ClInclude Include="exvol.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="exvol.h">
+    <ClInclude Include="classics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
