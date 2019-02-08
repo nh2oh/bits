@@ -3,7 +3,9 @@
 #include <array>
 #include <exception>
 
-/*
+
+using v3d_t = std::array<double,3>;
+
 //
 // Very crude non-allocating 2d matrix
 //
@@ -128,25 +130,28 @@ struct xyza_t {
 	atom_t atom {atom_t::h};
 };
 
+// An angle and corresponding vector about which to rotate some object
 struct vec3_angle_t {
-	std::array<double,3> v {0.0,0.0,0.0};
+	v3d_t v {0.0,0.0,0.0};
 	double theta {0.0};
 };
 
 struct vec3_dist_t {
-	std::array<double,3> v {0.0,0.0,0.0};
+	v3d_t v {0.0,0.0,0.0};
 	double dist {0.0};
 };
 
 bool overlap(const std::vector<xyza_t>&, const std::vector<xyza_t>&);
-
+bool overlap(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator,
+	std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator);
 double dsq(const xyza_t&, const xyza_t&);
+std::array<double,3> max_dimensions(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator);
 
 bool center(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator);
 bool rotate(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator, vec3_angle_t);
 
-matrix<double,3,3> make_3d_rotm(std::array<double,3>, double);
-bool shift3d(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator, vec3_dist_t);
+matrix<double,3,3> make_3d_rotm(v3d_t, double);
+bool shift3d(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator, v3d_t);
 double norm3d(std::array<double,3>::iterator, std::array<double,3>::iterator);
 
 struct exvol_result_t {
@@ -160,6 +165,5 @@ exvol_result_t exvol(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterato
 	int);
 
 
-	*/
 
 
