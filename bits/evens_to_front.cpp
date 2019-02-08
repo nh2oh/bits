@@ -202,3 +202,67 @@ bool test_inc_dec_arry() {
 	return true;
 }
 
+int test_insort() {
+	std::cout << "---------------------------------------------------\n"
+		<< "test_insort(): \n";
+
+	// vector to be printed, optional int idx of an element to be printed w/a '*'
+	auto printvec = [](const std::vector<int>& v, int idx_star=-1){ 
+		std::string s {'{'};
+		for (const auto& e : v) {
+			s += std::to_string(e);
+			if (idx_star==0) {
+				s += '*';
+			}
+			s += ',';
+			--idx_star;
+		};
+		s.pop_back();
+		s += '}';
+		return s;
+	};
+
+	// Already sorted
+	std::cout << "Sorted input\n";
+	std::vector<int> a {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
+	std::cout << "a = " << printvec(a) << "\n";
+	insort(a.begin(),a.end());
+	std::cout << "a = " << printvec(a) << "\n";
+	std::cout << std::endl;
+
+	// All values even
+	std::cout << "All values even\n";
+	std::vector<int> b {0,2,2,14,4,52,6,72,8,90,10,0,12,4};
+	std::cout << "b = " << printvec(b) << "\n";
+	insort(b.begin(),b.end());
+	std::cout << "b = " << printvec(b) << "\n";
+	std::cout << std::endl;
+
+	// Empty input
+	std::cout << "Empty input\n";
+	std::vector<int> c {};
+	std::cout << "c = " << printvec(c) << "\n";
+	insort(c.begin(),c.end());
+	std::cout << "c = " << printvec(c) << "\n";
+	std::cout << std::endl;
+
+	// Size == 1
+	std::cout << "Input size == 1\n";
+	std::vector<int> d {7};
+	std::cout << "d = " << printvec(d) << "\n";
+	insort(d.begin(),d.end());
+	std::cout << "d = " << printvec(d) << "\n";
+	std::cout << std::endl;
+
+	// Size == 2
+	std::cout << "Input size == 2\n";
+	std::vector<int> e {7,4};
+	std::cout << "e = " << printvec(e) << "\n";
+	insort(e.begin(),e.end());
+	std::cout << "e = " << printvec(e) << "\n";
+	std::cout << std::endl;
+
+	return 0;
+}
+
+

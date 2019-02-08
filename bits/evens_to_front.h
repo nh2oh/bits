@@ -90,6 +90,7 @@ bool test_inc_dec_arry();
 
 // Multiply two N-digit "numbers" represented as arrays with each element a digit on [0,9].  
 // Returns true on success, false on overflow
+/*
 template<int N>
 std::array<int,N> mult_dec_arrys(const std::array<int,N>& lhs, const std::array<int,N>& rhs) {
 	static_assert(N>=1);
@@ -112,10 +113,31 @@ std::array<int,N> mult_dec_arrys(const std::array<int,N>& lhs, const std::array<
 	}
 
 	return carry!=0;
-}
+};
+*/
 
+template<typename It>
+It insort(It beg, It end) {
+	if (end-beg <= 1) {
+		return end;
+	}
+	for (It curr=(beg+1); curr!=end; ++curr) {
+		It a=curr;
+		It b=curr-1;
+		while ((a!=beg) && (*a<*b)) {
+			std::iter_swap(b,a);
+			if (b==beg) {
+				break;
+			} else {
+				b--;
+				a--;
+			}
+		}
+	}
 
+	return end;
+};
 
-
+int test_insort();
 
 
