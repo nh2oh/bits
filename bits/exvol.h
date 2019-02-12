@@ -23,6 +23,12 @@ template<typename T, int Nr, int Nc>
 class matrix {
 public:
 	matrix() = default;
+	matrix(const std::array<T,Nr*Nc>& a) {
+		//data[r*Nc+c] = val;
+		for (int i=0; i<Nr*Nc; ++i) {
+			data[(i/Nc)*Nc+i%Nc] = a[i];
+		}
+	};
 
 	//
 	// Getters
@@ -33,7 +39,7 @@ public:
 		}
 		std::array<T,Nr> result {};
 		for (int r=0; r<Nr; ++r) {
-			result[r] = data[r*Nc + c];
+			result[r] = data[r*Nc+c];
 		}
 		return result;
 	};
@@ -43,7 +49,7 @@ public:
 		}
 		std::array<T,Nc> result {};
 		for (int c=0; c<Nc; ++c) {
-			result[c] = data[r*Nc + c];
+			result[c] = data[r*Nc+c];
 		}
 		return result;
 	};
@@ -51,7 +57,7 @@ public:
 		if (r>=Nr || c>=Nc || r<0 || c<0) {
 			std::abort();
 		}
-		return data[r*Nc + c];
+		return data[r*Nc+c];
 	};
 
 	//
@@ -61,7 +67,7 @@ public:
 		if (r<0 || r>=Nr || c<0 || c>=Nc) {
 			std::abort();
 		}
-		data[r*Nc + c] = val;
+		data[r*Nc+c] = val;
 	};
 	void setrow(int r, const std::array<T,Nc>& nr) {  // nr ~ "new row"
 		if (r<0 || r>=Nr) {
@@ -84,7 +90,7 @@ public:
 			std::abort();
 		}
 		for (int r=0; r<Nr; ++r) {
-			data[r*Nc + c] = nc[r];
+			data[r*Nc+c] = nc[r];
 		}
 	};
 	void setcol(int c, const std::vector<T>& nc) {  // nc ~ "new col"
@@ -92,7 +98,7 @@ public:
 			std::abort();
 		}
 		for (int r=0; r<Nr; ++r) {
-			data[r*Nc + c] = nc[r];
+			data[r*Nc+c] = nc[r];
 		}
 	};
 
