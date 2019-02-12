@@ -24,7 +24,14 @@ class matrix {
 public:
 	matrix() = default;
 	matrix(const std::array<T,Nr*Nc>& a) {
-		//data[r*Nc+c] = val;
+		for (int i=0; i<Nr*Nc; ++i) {
+			data[(i/Nc)*Nc+i%Nc] = a[i];
+		}
+	};
+	matrix(const std::vector<T>& a) {
+		if (a.size() != Nr*Nc) {
+			std::abort();
+		}
 		for (int i=0; i<Nr*Nc; ++i) {
 			data[(i/Nc)*Nc+i%Nc] = a[i];
 		}

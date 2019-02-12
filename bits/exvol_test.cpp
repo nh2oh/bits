@@ -13,20 +13,17 @@ int test_matrix_mult() {
 	auto a23_a32 = a23*a32;
 	auto a32_a23 = a32*a23;
 	matrix<int,2,2> ans_a23_a32 {std::array<int,4>{58,64,139,154}};
-	matrix<int,3,3> ans_a32_a23 {std::array<int,9>{0,0,0,0,0,0,0,0,0}};
+	matrix<int,3,3> ans_a32_a23 {std::array<int,9>{39,54,69,49,68,87,59,82,105}};
 
-	std::cout << print(a23) << std::endl;
-	std::cout << print(a32) << std::endl;
-	std::cout << print(a23_a32) << std::endl;
 	std::cout << print(a32_a23) << std::endl;
-
-	
-
+	std::cout << print(ans_a32_a23) << std::endl;
 
 	if (a23_a32 != ans_a23_a32) {
 		std::abort();
 	}
-
+	if (a32_a23 != ans_a32_a23) {
+		std::abort();
+	}
 	return 0;
 }
 
