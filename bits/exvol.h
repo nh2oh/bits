@@ -117,7 +117,7 @@ public:
 		std::array<T,Nr> result {};
 		for (int r=0; r<Nr; ++r) {
 			for (int c=0; c<Nc; ++c) {
-				result[c] += rhs[c]*data[r*Nc + c];
+				result[c] += rhs[c]*data[r*Nc+c];
 			}
 		}
 		return result;
@@ -130,7 +130,7 @@ public:
 		std::array<T,Nr> result {0.0};
 		for (int r=0; r<Nr; ++r) {
 			for (int c=0; c<Nc; ++c) {
-				result[c] += rhs[c]*data[r*Nc + c];
+				result[c] += rhs[c]*data[r*Nc+c];
 			}
 		}
 		return result;
@@ -139,7 +139,7 @@ public:
 	matrix<T,Nr,Nc>& operator+=(const matrix<T,Nr,Nc>& lhs) {
 		for (int r=0; r<Nr; ++r) {
 			for (int c=0; c<Nc; ++c) {
-				data[r*Nc + c] += lhs[r*Nc + c];
+				data[r*Nc+c] += lhs[r*Nc+c];
 			}
 		}
 		return this;
@@ -148,7 +148,7 @@ public:
 	matrix<T,Nr,Nc>& operator-=(const matrix<T,Nr,Nc>& lhs) {
 		for (int r=0; r<Nr; ++r) {
 			for (int c=0; c<Nc; ++c) {
-				data[r*Nc + c] -= lhs[r*Nc + c];
+				data[r*Nc+c] -= lhs[r*Nc+c];
 			}
 		}
 		return this;
@@ -185,7 +185,7 @@ matrix<T,Nr_lhs,Nc_rhs> operator*(const matrix<T,Nr_lhs,Nc_lhs>& lhs, const matr
 		auto rhs_col = rhs.col(c);
 		for (int r=0; r<Nr_lhs; ++r) {
 			auto lhs_row = lhs.row(r);
-			result.data[r*Nc_rhs + c] = dotprod(lhs_row,rhs_col);
+			result.data[r*Nc_rhs+c] = dotprod(lhs_row,rhs_col);
 		}
 	}
 	return result;
