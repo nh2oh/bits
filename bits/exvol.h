@@ -2,9 +2,19 @@
 #include <vector>
 #include <array>
 #include <exception>
-
+#include <string>
 
 using v3d_t = std::array<double,3>;
+
+template<typename T, int N>
+T dotprod(const std::array<T,N>& lhs, const std::array<T,N>& rhs) {
+	T result {};
+	for (int i=0; i<N; ++i) {
+		result += lhs[i]*rhs[i];
+	}
+	return result;
+}
+
 
 //
 // Very crude non-allocating 2d matrix
@@ -47,12 +57,18 @@ public:
 	//
 	// Setters
 	//
+	void set(int r, int c, T val) {
+		if (r<0 || r>=Nr || c<0 || c>=Nc) {
+			std::abort();
+		}
+		data[r*Nc + c] = val;
+	};
 	void setrow(int r, const std::array<T,Nc>& nr) {  // nr ~ "new row"
 		if (r<0 || r>=Nr) {
 			std::abort();
 		}
 		for (int c=0; c<Nc; ++c) {
-			data[c] = nr[c];
+			data[r*Nc+c] = nr[c];
 		}
 	};
 	void setrow(int r, const std::vector<T>& nr) {  // nr ~ "new row"
@@ -60,7 +76,7 @@ public:
 			std::abort();
 		}
 		for (int c=0; c<Nc; ++c) {
-			data[c] = nr[c];
+			data[r*Nc+c] = nr[c];
 		}
 	};
 	void setcol(int c, const std::array<T,Nr>& nc) {  // nc ~ "new col"
@@ -81,7 +97,7 @@ public:
 	};
 
 	//
-	// Operations 
+	// Arithmetic operations 
 	//
 	// M*v
 	std::array<T,Nr> operator*(const std::array<T,Nc>& rhs) const {
@@ -107,7 +123,7 @@ public:
 		return result;
 	};
 	// Ma += Mb
-	std::array<T,Nr,Nc>& operator+=(const std::array<T,Nr,Nc>& lhs) {
+	matrix<T,Nr,Nc>& operator+=(const matrix<T,Nr,Nc>& lhs) {
 		for (int r=0; r<Nr; ++r) {
 			for (int c=0; c<Nc; ++c) {
 				data[r*Nc + c] += lhs[r*Nc + c];
@@ -116,7 +132,7 @@ public:
 		return this;
 	};
 	// Ma -= Mb
-	std::array<T,Nr,Nc>& operator-=(const std::array<T,Nr,Nc>& lhs) {
+	matrix<T,Nr,Nc>& operator-=(const matrix<T,Nr,Nc>& lhs) {
 		for (int r=0; r<Nr; ++r) {
 			for (int c=0; c<Nc; ++c) {
 				data[r*Nc + c] -= lhs[r*Nc + c];
@@ -124,12 +140,63 @@ public:
 		}
 		return this;
 	};
-
-
+	//
+	// Comparison operations 
+	//
+	// M==M
+	bool operator==(const matrix<T,Nr,Nc>& rhs) const {
+		for (int r=0; r<Nr; ++r) {
+			for (int c=0; c<Nc; ++c) {
+				if (data[r*Nc+c] != rhs.data[r*Nc+c]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	};
+	// M!=M
+	bool operator!=(const matrix<T,Nr,Nc>& rhs) const {
+		return !(*this==rhs);
+	};
 
 
 	std::array<T,Nr*Nc> data {};
 };
+
+// Ma * Mb
+template<typename T, int Nr_lhs, int Nc_lhs, int Nr_rhs, int Nc_rhs>
+matrix<T,Nr_lhs,Nc_rhs> operator*(const matrix<T,Nr_lhs,Nc_lhs>& lhs, const matrix<T,Nr_rhs,Nc_rhs>& rhs) {
+	static_assert(Nc_lhs == Nr_rhs);
+	matrix<T,Nr_lhs,Nc_rhs> result {};
+	for (int c=0; c<Nc_rhs; ++c) {
+		auto rhs_col = rhs.col(c);
+		for (int r=0; r<Nr_lhs; ++r) {
+			auto lhs_row = lhs.row(r);
+			result.data[r*Nc_rhs + c] = dotprod(lhs_row,rhs_col);
+		}
+	}
+	return result;
+};
+
+
+template<typename T, int Nr, int Nc>
+std::string print(const matrix<T,Nr,Nc>& m) {
+	std::string result {};
+	for (int r=0; r<Nr; ++r) {
+		for (int c=0; c<Nc; ++c) {
+			result += (std::to_string(m(r,c)) + "\t");
+		}
+		result += "\n";
+	}
+	return result;
+};
+
+
+
+int test_matrix_mult();
+
+
+
 
 
 enum class atom_t : uint8_t {

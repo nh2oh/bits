@@ -168,7 +168,7 @@ decltype(*It) knapsack_intl(It beg, It end, decltype(*It) t) {
 
 }
 
-
+/*
 template<typename It>
 It knapsack(It beg, It end, decltype(*It) t) {
 	insort(beg,end);  // reverse
@@ -178,7 +178,7 @@ It knapsack(It beg, It end, decltype(*It) t) {
 		if (*beg+*curr > t)
 
 }
-
+*/
 
 
 

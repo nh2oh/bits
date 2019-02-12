@@ -94,6 +94,7 @@
     <ClCompile Include="evens_to_front.cpp" />
     <ClCompile Include="exvol.cpp" />
     <ClCompile Include="classics.cpp" />
+    <ClCompile Include="exvol_test.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="wfind.cpp" />
   </ItemGroup>
