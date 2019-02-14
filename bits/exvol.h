@@ -4,7 +4,7 @@
 #include <exception>
 #include <string>
 
-using v3d_t = std::array<double,3>;
+
 
 template<typename T, int N>
 T dotprod(const std::array<T,N>& lhs, const std::array<T,N>& rhs) {
@@ -161,10 +161,9 @@ public:
 				ssqs[c] += (data[r*Nc+c])*(data[r*Nc+c]);
 			}
 		}
-		double exp = 1.0/static_cast<double>(Nr);
 		
 		for (int c=0; c<Nc; ++c) {
-			double curr_len = std::pow(ssqs[c],exp);
+			double curr_len = std::sqrt(ssqs[c]);
 			if (curr_len == 0.0) { continue; }
 			for (int r=0; r<Nr; ++r) {
 				data[r*Nc+c] /= curr_len;
@@ -191,7 +190,6 @@ public:
 	bool operator!=(const matrix<T,Nr,Nc>& rhs) const {
 		return !(*this==rhs);
 	};
-
 
 	std::array<T,Nr*Nc> data {};
 };
@@ -234,6 +232,8 @@ std::string print(const matrix<T,Nr,Nc>& m) {
 };
 
 
+using v3d_t = matrix<double,3,1>;
+
 
 int test_matrix_mult();
 int test_matrix_add() ;
@@ -253,29 +253,19 @@ enum class atom_t : uint8_t {
 double radius(const atom_t&);
 
 // "xyz atom"
-/*struct xyza_t {
-	matrix<double,3,1> p {0.0,0.0,0.0};
-	atom_t atom {atom_t::h};
-};*/
 struct xyza_t {
-	double x {0.0};
-	double y {0.0};
-	double z {0.0};
+	matrix<double,3,1> v {};
 	atom_t atom {atom_t::h};
 };
 
 // An angle and corresponding vector about which to rotate some object
-/*struct vec3_angle_t {
-	matrix<double,3,1> v {0.0,0.0,0.0};
-	double theta {0.0};
-};*/
 struct vec3_angle_t {
-	v3d_t v {0.0,0.0,0.0};
+	v3d_t v {};
 	double theta {0.0};
 };
 
 struct vec3_dist_t {
-	v3d_t v {0.0,0.0,0.0};
+	v3d_t v {};
 	double dist {0.0};
 };
 
@@ -290,7 +280,7 @@ bool rotate(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator, vec3_a
 
 matrix<double,3,3> make_3d_rotm(v3d_t, double);
 bool shift3d(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator, v3d_t);
-double norm3d(std::array<double,3>::iterator, std::array<double,3>::iterator);
+double norm(std::array<double,3>::iterator, std::array<double,3>::iterator);
 
 struct exvol_result_t {
 	int n_test {0};
@@ -301,7 +291,5 @@ struct exvol_result_t {
 exvol_result_t exvol(std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator,
 	std::vector<xyza_t>::iterator, std::vector<xyza_t>::iterator,
 	int);
-
-
 
 
