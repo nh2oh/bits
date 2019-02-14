@@ -153,6 +153,26 @@ public:
 		}
 		return *this;
 	};
+	// normalize cols to magnitude == 1
+	matrix<T,Nr,Nc>& cnorm() {
+		std::array<T,Nc> ssqs {};
+		for (int r=0; r<Nr; ++r) {
+			for (int c=0; c<Nc; ++c) {
+				ssqs[c] += (data[r*Nc+c])*(data[r*Nc+c]);
+			}
+		}
+		double exp = 1.0/static_cast<double>(Nr);
+		
+		for (int c=0; c<Nc; ++c) {
+			double curr_len = std::pow(ssqs[c],exp);
+			if (curr_len == 0.0) { continue; }
+			for (int r=0; r<Nr; ++r) {
+				data[r*Nc+c] /= curr_len;
+			}
+		}
+		return *this;
+	};
+
 	//
 	// Comparison operations 
 	//
@@ -218,8 +238,8 @@ std::string print(const matrix<T,Nr,Nc>& m) {
 int test_matrix_mult();
 int test_matrix_add() ;
 int test_matrix_subt();
-
-
+int test_dotp();
+int test_cnorm();
 
 enum class atom_t : uint8_t {
 	h,
@@ -233,6 +253,10 @@ enum class atom_t : uint8_t {
 double radius(const atom_t&);
 
 // "xyz atom"
+/*struct xyza_t {
+	matrix<double,3,1> p {0.0,0.0,0.0};
+	atom_t atom {atom_t::h};
+};*/
 struct xyza_t {
 	double x {0.0};
 	double y {0.0};
@@ -241,6 +265,10 @@ struct xyza_t {
 };
 
 // An angle and corresponding vector about which to rotate some object
+/*struct vec3_angle_t {
+	matrix<double,3,1> v {0.0,0.0,0.0};
+	double theta {0.0};
+};*/
 struct vec3_angle_t {
 	v3d_t v {0.0,0.0,0.0};
 	double theta {0.0};

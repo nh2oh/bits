@@ -62,10 +62,29 @@ int test_matrix_subt() {
 }
 
 
+int test_dotp() {
+	std::array<int,6> a {std::array<int,6>{1,2,3, 4, 5, 6}};
+	std::array<int,6> b {std::array<int,6>{7,8,9,10,11,12}};
+	if (dotprod(a,b) != 217 || dotprod(b,a) != 217) {
+		std::abort();
+	}
 
+	return 0;
+}
 
+int test_cnorm() {
+	matrix<double,6,1> a {std::array<double,6>{1.0,2.0,3.0, 4.0, 5.0, 6.0}};
+	matrix<double,3,1> b {std::array<double,3>{7.0,8.0,9.0}};
+	std::cout << print(a.cnorm()) << "\n\n" << print(b.cnorm()) << std::endl;
+	/*if (std::round(a.cnorm()*1000) != 21208) {
+		std::abort();
+	}
+	if (std::round(b.cnorm()*1000) != 57889) {
+		std::abort();
+	}*/
 
-
+	return 0;
+}
 
 
 

@@ -94,6 +94,7 @@ exvol_result_t exvol(std::vector<xyza_t>::iterator a_beg, std::vector<xyza_t>::i
 // - Lookup table for std::pow(radius(a[i].atom)+radius(b[j].atom),2) for all radius pairs
 // - Presort?
 // - Only compute dsq(a[i],b[j]) if there might plausibly be a clash
+// - Partition the sphere in half; only test pairs on the same half 
 bool overlap(const std::vector<xyza_t>& a, const std::vector<xyza_t>& b) {
 	for (int i=0; i<a.size(); ++i) {
 		for (int j=0; j<b.size(); ++j) {
