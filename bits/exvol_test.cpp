@@ -28,9 +28,38 @@ int test_matrix_mult() {
 }
 
 
+int test_matrix_add() {
+	matrix<int,2,3> a23 {std::array<int,6>{1,2,3, 4, 5, 6}};
+	matrix<int,2,3> b23 {std::array<int,6>{7,8,9,10,11,12}};
+	auto a23_p_b23 = a23+b23;
+	auto b23_p_a23 = b23+a23;
+	matrix<int,2,3> ans_a23_p_b23 {std::array<int,6>{8,10,12,14,16,18}};
 
+	if (a23_p_b23 != ans_a23_p_b23) {
+		std::abort();
+	}
+	if (b23_p_a23 != ans_a23_p_b23) {
+		std::abort();
+	}
+	return 0;
+}
 
+int test_matrix_subt() {
+	matrix<int,2,3> a23 {std::array<int,6>{1,2,3, 4, 5, 6}};
+	matrix<int,2,3> b23 {std::array<int,6>{7,8,9,10,11,12}};
+	auto a23_m_b23 = a23-b23;
+	auto b23_m_a23 = b23-a23;
+	matrix<int,2,3> ans_a23_m_b23 {std::array<int,6>{-6,-6,-6,-6,-6,-6}};
+	matrix<int,2,3> ans_b23_m_a23 {std::array<int,6>{6,6,6,6,6,6}};
 
+	if (a23_m_b23 != ans_a23_m_b23) {
+		std::abort();
+	}
+	if (b23_m_a23 != ans_b23_m_a23) {
+		std::abort();
+	}
+	return 0;
+}
 
 
 

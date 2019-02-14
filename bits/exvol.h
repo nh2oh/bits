@@ -139,19 +139,19 @@ public:
 	matrix<T,Nr,Nc>& operator+=(const matrix<T,Nr,Nc>& lhs) {
 		for (int r=0; r<Nr; ++r) {
 			for (int c=0; c<Nc; ++c) {
-				data[r*Nc+c] += lhs[r*Nc+c];
+				data[r*Nc+c] += lhs.data[r*Nc+c];
 			}
 		}
-		return this;
+		return *this;
 	};
 	// Ma -= Mb
 	matrix<T,Nr,Nc>& operator-=(const matrix<T,Nr,Nc>& lhs) {
 		for (int r=0; r<Nr; ++r) {
 			for (int c=0; c<Nc; ++c) {
-				data[r*Nc+c] -= lhs[r*Nc+c];
+				data[r*Nc+c] -= lhs.data[r*Nc+c];
 			}
 		}
-		return this;
+		return *this;
 	};
 	//
 	// Comparison operations 
@@ -190,7 +190,16 @@ matrix<T,Nr_lhs,Nc_rhs> operator*(const matrix<T,Nr_lhs,Nc_lhs>& lhs, const matr
 	}
 	return result;
 };
-
+// Ma + Mb
+template<typename T, int Nr, int Nc>
+matrix<T,Nr,Nc>& operator+(matrix<T,Nr,Nc> lhs, const matrix<T,Nr,Nc>& rhs) {
+	return lhs+=rhs;
+};
+// Ma - Mb
+template<typename T, int Nr, int Nc>
+matrix<T,Nr,Nc>& operator-(matrix<T,Nr,Nc> lhs, const matrix<T,Nr,Nc>& rhs) {
+	return lhs-=rhs;
+};
 
 template<typename T, int Nr, int Nc>
 std::string print(const matrix<T,Nr,Nc>& m) {
@@ -207,8 +216,8 @@ std::string print(const matrix<T,Nr,Nc>& m) {
 
 
 int test_matrix_mult();
-
-
+int test_matrix_add() ;
+int test_matrix_subt();
 
 
 
