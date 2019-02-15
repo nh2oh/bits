@@ -155,10 +155,10 @@ int test_reverse_words();
 
 
 //
-// Product of all ints in input except for the int @ idx i
+// Reverse digits
 //
-int prod_all_except(const std::vector<int>&, int);
-int prod_all_except();
+int reverse_digits(int);
+int test_reverse_digits();
 
 
 

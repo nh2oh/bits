@@ -423,11 +423,42 @@ int test_reverse_words() {
 
 
 
+// TODO:  Overflow
+int reverse_digits(int n) {
+	bool neg = n<0;
+	if (neg) { n *= -1; }
+	int nr {0};
+	while (n != 0) {
+		nr *= 10;
+		nr += n%10;
+		n /= 10;
+	}
 
-int prod_all_except(const std::vector<int>&, int) {
-	//...
-
-
+	return neg ? -1*nr : nr;
 }
 
+int test_reverse_digits() {
 
+	int n {0};
+
+	n = 1234;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
+
+	n = 1324;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
+
+	n = 0;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
+
+	n = -4;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
+
+	n = -2365;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
+
+	// Overflow
+	n = 2147483647;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
+
+	return 0;
+}
