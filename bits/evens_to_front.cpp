@@ -462,3 +462,51 @@ int test_reverse_digits() {
 
 	return 0;
 }
+
+
+
+
+
+
+
+std::string pp(int n) {
+	std::string s {};
+	
+	if (n == 0) {
+		return s;
+	} else if (n == 1) {
+		s += "()";
+	} else if (n >= 2) {
+		s += pp(n-1);
+		s += '(';
+		s += pp(n-1);
+		s += ')';
+
+
+
+	}
+	return s;
+}
+
+
+int test_pp() {
+	int n {0};
+
+	n=0;
+	std::cout << "n == " << std::to_string(n) << " => " << pp(n) << std::endl;
+
+	n=1;
+	std::cout << "n == " << std::to_string(n) << " => " << pp(n) << std::endl;
+
+	n=2;
+	std::cout << "n == " << std::to_string(n) << " => " << pp(n) << std::endl;
+
+	n=3;
+	std::cout << "n == " << std::to_string(n) << " => " << pp(n) << std::endl;
+
+	return 0;
+}
+
+
+
+
