@@ -354,6 +354,8 @@ std::string reverse_words(const std::string& s) {
 	for (std::string::const_reverse_iterator rit=s.crbegin(); rit!=s.crend(); ++rit) {
 		if (*rit == ' ') {
 			if (curr_word_len > 0) {
+				// NB rit.base() returns an iterator to the first letter in the word, even though
+				// *rit == ' '.  
 				std::string::const_iterator w_start = rit.base();
 				std::string::const_iterator w_end = w_start; w_end+=curr_word_len;
 				result.insert(result.end(), w_start, w_end);
@@ -364,7 +366,11 @@ std::string reverse_words(const std::string& s) {
 			++curr_word_len;
 		}
 	}
-
+	// For s which do not begin with spaces, the very first word of s is not appended to result since 
+	// the loop conditional only triggers when *rit == ' '.  It is possible to modify the conditional 
+	// to triger when (*rit == ' ' || rit == s.crend()-1), however, for rit -> the first letter of the
+	// first word in s, w_start would then point to the _second_ letter of the first word in s (see 
+	// the note in the loop conditional).  
 	if (curr_word_len > 0) {
 		std::string::const_iterator w_start = s.cbegin();
 		std::string::const_iterator w_end = w_start; w_end+=curr_word_len;
@@ -410,12 +416,18 @@ int test_reverse_words() {
 	s = "x";
 	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
 
-	//is, the partner ) for any given ( is the _closest_ ).  Thus, in
-
-
-
 	return 0;
 }
 
+
+
+
+
+
+int prod_all_except(const std::vector<int>&, int) {
+	//...
+
+
+}
 
 

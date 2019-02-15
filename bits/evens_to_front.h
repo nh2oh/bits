@@ -154,6 +154,11 @@ std::string reverse_words(const std::string&);
 int test_reverse_words();
 
 
+//
+// Product of all ints in input except for the int @ idx i
+//
+int prod_all_except(const std::vector<int>&, int);
+int prod_all_except();
 
 
 
