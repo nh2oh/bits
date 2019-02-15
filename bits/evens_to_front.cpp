@@ -266,3 +266,85 @@ int test_insort() {
 }
 
 
+
+//
+// Find unmatched parens
+//
+// Paren matching is "greedy;" that is, the partner ) for any given ( is the _closest_ ).  Thus, in
+// a(b(cd)efgh(i)jk, the unmatched ( is the one following the a, not the one following the b.  However,
+// this does not mean that in a str w/ an unmatched (, the very first ( is always the problem.  
+// Consider:
+// ab((cd)e)fgh(ijk
+// Here the unmatched ( follows the h.  
+// On the other hand, the very first "excess" ) is considered unmatched.  
+//
+std::string::const_iterator find_first_uparen(const std::string& s) {
+	int depth {0};
+	std::string::const_iterator first_open;
+	for (std::string::const_iterator it = s.cbegin(); it!=s.cend(); ++it) {
+		if (*it == '(') {
+			++depth;
+			if (depth == 1) {
+				first_open = it;
+			}
+		} else if (*it == ')') {
+			--depth;
+		}
+
+		if (depth == -1) {
+			return it;
+		}
+	}
+	
+	if (depth > 0) {
+		return first_open;
+	} else {
+		return s.cend();
+	}
+}
+
+int test_find_first_uparen() {
+	std::string s {};
+	std::string::const_iterator it {};
+
+	s = "ab((cd)e)fgh(ijk";
+	it = find_first_uparen(s);
+	s.insert(it,1,'*');
+	std::cout << s << std::endl;
+
+	s = "a(b(cd)efgh(i)jk";
+	it = find_first_uparen(s);
+	s.insert(it,1,'*');
+	std::cout << s << std::endl;
+
+	s = "a()(b(cd)efgh(i)jk";
+	it = find_first_uparen(s);
+	s.insert(it,1,'*');
+	std::cout << s << std::endl;
+
+	// None unmatched
+	s = "a()(b(cd)efgh(i))jk";
+	it = find_first_uparen(s);
+	s.insert(it,1,'*');
+	std::cout << s << std::endl;
+
+	s = "a()(b(cd)efgh(i))j)k";
+	it = find_first_uparen(s);
+	s.insert(it,1,'*');
+	std::cout << s << std::endl;
+
+	s.clear();
+	it = find_first_uparen(s);
+	s.insert(it,1,'*');
+	std::cout << s << std::endl;
+
+	s = "no parens at all!";
+	it = find_first_uparen(s);
+	s.insert(it,1,'*');
+	std::cout << s << std::endl;
+
+	return 0;
+}
+
+
+

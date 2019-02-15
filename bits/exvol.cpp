@@ -116,7 +116,8 @@ std::array<double,3> max_dimensions(std::vector<xyza_t>::iterator beg, std::vect
 		min_z = std::min(min_z, (*it_curr).v(2,0)-0.5*radius((*it_curr).atom));
 	}
 
-	return v3d_t {std::abs(max_x-min_x),std::abs(max_y-min_y),std::abs(max_z-min_z)};
+	//return v3d_t {std::abs(max_x-min_x),std::abs(max_y-min_y),std::abs(max_z-min_z)};
+	return std::array<double,3> {};
 }
 
 

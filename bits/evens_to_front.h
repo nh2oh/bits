@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <type_traits>
+#include <string>
 
 // Moves all the even numbers in [beg,end) to the front of the range.  Returns an
 // iterator to one past the final even number.  
@@ -140,48 +141,8 @@ It insort(It beg, It end) {
 
 int test_insort();
 
-
 //
-// "Knapsack problem"
-// Given a set of integers S={s1,s2,...,sn} and an integer T, find a subset of S which 
-// sums to T.  Ex, for S={2,7,3} the subset {2,7} sums to T=9 but there is no subset which 
-// sums to T=4 or T=8.  
+// Find unmatched parens
 //
-//
-// 1) add all; 2) try subtracting all sets of singles, doubles...
-//
-template<typename It>
-decltype(*It) knapsack_intl(It beg, It end, decltype(*It) t) {
-	
-	for (It curr=beg; curr!=end; ++curr) {
-		if (*curr<=t) {
-			break;
-		}
-	}
-
-	if (beg!=end) {
-		auto curr = *beg;
-		return curr + knapsack_intl(++beg, end, t-curr);
-	} else {
-		//...
-	}
-
-}
-
-/*
-template<typename It>
-It knapsack(It beg, It end, decltype(*It) t) {
-	insort(beg,end);  // reverse
-	knapsack_intl(beg,end,t);
-	auto sum = std::accumulate(beg,end);
-	for (It curr=beg; curr!=end; ++curr) {
-		if (*beg+*curr > t)
-
-}
-*/
-
-
-
-
-
-
+std::string::const_iterator find_first_uparen(const std::string&);
+int test_find_first_uparen();
