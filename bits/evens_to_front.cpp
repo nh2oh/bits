@@ -348,3 +348,74 @@ int test_find_first_uparen() {
 
 
 
+std::string reverse_words(const std::string& s) {
+	std::string result {};  result.reserve(s.size());
+	int curr_word_len {0};
+	for (std::string::const_reverse_iterator rit=s.crbegin(); rit!=s.crend(); ++rit) {
+		if (*rit == ' ') {
+			if (curr_word_len > 0) {
+				std::string::const_iterator w_start = rit.base();
+				std::string::const_iterator w_end = w_start; w_end+=curr_word_len;
+				result.insert(result.end(), w_start, w_end);
+				result.append(1,' ');
+			}
+			curr_word_len = 0;
+		} else {
+			++curr_word_len;
+		}
+	}
+
+	if (curr_word_len > 0) {
+		std::string::const_iterator w_start = s.cbegin();
+		std::string::const_iterator w_end = w_start; w_end+=curr_word_len;
+		result.insert(result.end(), w_start, w_end);
+	}
+
+	if (result.size() > 0 && result.back() == ' ') {
+		// If s begins w/ leading spaces then the first word is appended to result by the loop, not
+		// the post-loop conditional and a space will be appended to the first word in result, which
+		// needs to be removed.  
+		result.pop_back();
+	}
+	return result;
+}
+
+int test_reverse_words() {
+	std::string s {};
+
+	s = "Paren matching is \"greedy;\" that";
+	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
+
+	s = "Paren matching is \"greedy;\" that     ";
+	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
+	
+	s = "     Paren matching is \"greedy;\" that     ";
+	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
+
+	s.clear();
+	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
+
+	s = "  ";
+	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
+
+	s = " ";
+	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
+
+	s = "onewordonly";
+	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
+
+	s = "a b c";
+	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
+
+	s = "x";
+	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
+
+	//is, the partner ) for any given ( is the _closest_ ).  Thus, in
+
+
+
+	return 0;
+}
+
+
+

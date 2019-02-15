@@ -146,3 +146,14 @@ int test_insort();
 //
 std::string::const_iterator find_first_uparen(const std::string&);
 int test_find_first_uparen();
+
+//
+// Reverse words in sentence
+//
+std::string reverse_words(const std::string&);
+int test_reverse_words();
+
+
+
+
+
