@@ -161,5 +161,39 @@ int reverse_digits(int);
 int test_reverse_digits();
 
 
-std::string pp(int n);
-int test_pp();
+//
+// reverse
+//
+template<typename It>
+void dbkreverse(It beg, It end) {
+	while (beg!=end && beg!=--end) {
+		std::iter_swap(beg,end);
+		++beg;
+	}
+}
+int test_reverse();
+
+
+
+
+//
+// shift_left
+//
+// Returns an iterator to one past the last shifted value (== end - (beg+n)).
+// TODO: Check for n<0
+template<typename It>
+It dbk_shift_left(It beg, It end, int n) {
+	if (n > (end-beg)) {
+		return beg;
+	}
+	It curr = beg+n;
+	while (curr!=end) {
+		*beg=*curr;
+		++curr;
+		++beg;
+	}
+	return beg;
+}
+int test_dbk_shift_left();
+
+

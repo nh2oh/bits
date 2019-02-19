@@ -465,48 +465,94 @@ int test_reverse_digits() {
 
 
 
-
-
-
-
-std::string pp(int n) {
-	std::string s {};
-	
-	if (n == 0) {
+int test_reverse() {
+	// vector to be printed, optional int idx of an element to be printed w/a '*'
+	auto printvec = [](const std::vector<int>& v, int idx_star=-1){ 
+		std::string s {'{'};
+		for (const auto& e : v) {
+			s += std::to_string(e);
+			if (idx_star==0) {
+				s += '*';
+			}
+			s += ',';
+			--idx_star;
+		};
+		if (v.size()>0) {
+			s.pop_back();
+		}
+		s += '}';
 		return s;
-	} else if (n == 1) {
-		s += "()";
-	} else if (n >= 2) {
-		s += pp(n-1);
-		s += '(';
-		s += pp(n-1);
-		s += ')';
+	};
+
+	std::vector<int> a {1,2,3,4,5,6,7,8,9};
+	std::cout << printvec(a) << " => ";
+	dbkreverse(a.begin(),a.end());
+	std::cout << printvec(a) << std::endl;
 
 
-
-	}
-	return s;
-}
-
-
-int test_pp() {
-	int n {0};
-
-	n=0;
-	std::cout << "n == " << std::to_string(n) << " => " << pp(n) << std::endl;
-
-	n=1;
-	std::cout << "n == " << std::to_string(n) << " => " << pp(n) << std::endl;
-
-	n=2;
-	std::cout << "n == " << std::to_string(n) << " => " << pp(n) << std::endl;
-
-	n=3;
-	std::cout << "n == " << std::to_string(n) << " => " << pp(n) << std::endl;
+	std::vector<int> b {};
+	std::cout << printvec(b) << " => ";
+	dbkreverse(b.begin(),b.end());
+	std::cout << printvec(b) << std::endl;
 
 	return 0;
 }
 
+
+int test_dbk_shift_left() {
+	// vector to be printed, optional int idx of an element to be printed w/a '*'
+	auto printvec = [](const std::vector<int>& v, int idx_star=-1){ 
+		std::string s {'{'};
+		for (const auto& e : v) {
+			s += std::to_string(e);
+			if (idx_star==0) {
+				s += '*';
+			}
+			s += ',';
+			--idx_star;
+		};
+		if (v.size()>0) {
+			s.pop_back();
+		}
+		s += '}';
+		return s;
+	};
+
+	std::vector<int> a {};
+
+
+	a = std::vector<int> {1,2,3,4,5,6,7,8,9};
+	std::cout << printvec(a) << " => ";
+	auto rit = dbk_shift_left(a.begin()+2,a.begin()+6,0);
+	std::cout << printvec(a,rit-a.begin()) << "; " << std::to_string(*rit) << std::endl;
+
+	a = std::vector<int> {1,2,3,4,5,6,7,8,9};
+	std::cout << printvec(a) << " => ";
+	rit = dbk_shift_left(a.begin()+2,a.begin()+6,1);
+	std::cout << printvec(a,rit-a.begin()) << "; " << std::to_string(*rit) << std::endl;
+
+	a = std::vector<int> {1,2,3,4,5,6,7,8,9};  // 1,2,5,6,5*,6,7,8,9
+	std::cout << printvec(a) << " => ";
+	rit = dbk_shift_left(a.begin()+2,a.begin()+6,2);
+	std::cout << printvec(a,rit-a.begin()) << "; " << std::to_string(*rit) << std::endl;
+
+	a = std::vector<int> {1,2,3,4,5,6,7,8,9};  // 1,2,6,4*,5,6,7,8,9
+	std::cout << printvec(a) << " => ";
+	rit = dbk_shift_left(a.begin()+2,a.begin()+6,3);
+	std::cout << printvec(a,rit-a.begin()) << "; " << std::to_string(*rit) << std::endl;
+
+	a = std::vector<int> {1,2,3,4,5,6,7,8,9};  // 1,2,3*,4,5,6,7,8,9
+	std::cout << printvec(a) << " => ";
+	rit = dbk_shift_left(a.begin()+2,a.begin()+6,4);
+	std::cout << printvec(a,rit-a.begin()) << "; " << std::to_string(*rit) << std::endl;
+
+	a = std::vector<int> {1,2,3,4,5,6,7,8,9};  // 1,2,3*,4,5,6,7,8,9
+	std::cout << printvec(a) << " => ";
+	rit = dbk_shift_left(a.begin()+2,a.begin()+6,5);
+	std::cout << printvec(a,rit-a.begin()) << "; " << std::to_string(*rit) << std::endl;
+
+	return 0;
+}
 
 
 
