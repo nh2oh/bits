@@ -36,6 +36,9 @@
     <ClCompile Include="exvol_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="probs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitcounter.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="classics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="probs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
