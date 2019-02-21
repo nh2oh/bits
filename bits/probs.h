@@ -28,8 +28,6 @@ It dbkrot(It beg, It end, It pvt) {
 }
 int test_dbkrot();
 
-
-
 template<typename It, typename T>
 void reverse_chunk_order(It beg, It end, T m) {
 	bool in = (*beg == m);
@@ -43,6 +41,28 @@ void reverse_chunk_order(It beg, It end, T m) {
 	}
 }
 int test_reverse_chunk_order();
+
+
+
+template<typename It>
+std::string spiral(It beg, It end, It nc) {
+
+	auto ur = [](It beg, int end, int nc) -> std::string { 
+		std::string s {};
+		It curr=beg;
+		for (int i=0; i<nc; ++i) {
+			s += std::to_string(*curr);
+			++curr;
+		}
+
+		curr = beg+nc;
+		while (curr!=end) {
+			s += std::to_string(*curr);
+			curr+= nc;
+		}
+		return s;
+	};
+	auto ll = [](int i, int n, int nc) -> int { return i/nc; };
 
 
 
