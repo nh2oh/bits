@@ -43,7 +43,7 @@ void reverse_chunk_order(It beg, It end, T m) {
 int test_reverse_chunk_order();
 
 
-
+/*
 template<typename It>
 std::string spiral(It beg, It end, It nc) {
 
@@ -63,6 +63,9 @@ std::string spiral(It beg, It end, It nc) {
 		return s;
 	};
 	auto ll = [](int i, int n, int nc) -> int { return i/nc; };
+	*/
 
 
 
+bool pwr3(int);
+int test_pwr3();
