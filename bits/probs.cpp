@@ -124,6 +124,9 @@ int test_reverse_chunk_order() {
 // Summary:
 // I need log3(n) to be <= its exact value and to not differ from its exact value by more than 1.  
 //
+// Wikipedia:
+// The integer binary logarithm can be interpreted as the zero-based index of the most 
+// significant 1 bit in the input.  
 //
 bool pwr3(int n) {
 	int r = n/3;
@@ -177,6 +180,30 @@ int test_pwr3() {
 		}
 	}
 	std::cout << std::endl;
+
+	return 0;
+}
+
+
+int hamming_dist(int a, int b) {
+	unsigned int ua = *static_cast<unsigned int*>(static_cast<void*>(&a));
+	unsigned int ub = *static_cast<unsigned int*>(static_cast<void*>(&b));
+
+	int count = 0;
+	unsigned int mask=1;
+	while (mask > 0) { //(ua>0 || ub>0) {
+		if ((ua&mask) != (ub&mask)) {
+			++count;
+		}
+		mask<<=1;
+	}
+
+	return count;
+}
+
+int test_hamming_dist() {
+	std::cout << std::to_string(hamming_dist(1,4)) << std::endl;
+	std::cout << std::to_string(hamming_dist(-16,99)) << std::endl;
 
 	return 0;
 }

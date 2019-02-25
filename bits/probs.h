@@ -69,3 +69,7 @@ std::string spiral(It beg, It end, It nc) {
 
 bool pwr3(int);
 int test_pwr3();
+
+int hamming_dist(int, int);
+int test_hamming_dist();
+
