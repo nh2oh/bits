@@ -39,6 +39,9 @@
     <ClCompile Include="probs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="floaty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitcounter.h">
@@ -57,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="probs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="floaty.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

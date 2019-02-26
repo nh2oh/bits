@@ -53,6 +53,22 @@ int tests_ones() {
 
 
 int tests_bitprinter() {
+
+	struct f_tests_t {
+		float v {0};
+		std::string ans {"00000000|"};
+	};
+	std::vector<f_tests_t> f {
+		{0,"00000000|"},{1,"00000001|"},{2,"00000010|"},{3,"00000011|"},{4,"00000100|"},
+		{15,"00000011|"},{16,"00000100|"},{255,"00000100|"},{256,"00000100|"}
+	}; 
+
+	for (int i=0; i<f.size(); ++i) {
+		std::cout << "f[i].v == " << std::to_string(f[i].v) << " => bitprinter(f[i].v) == " 
+			<< bitprinter(f[i].v) << std::endl;
+	}
+
+
 	struct ui8_tests_t {
 		uint8_t v {0};
 		std::string ans {"00000000|"};

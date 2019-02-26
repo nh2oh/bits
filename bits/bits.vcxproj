@@ -97,6 +97,7 @@
     <ClCompile Include="exvol.cpp" />
     <ClCompile Include="classics.cpp" />
     <ClCompile Include="exvol_test.cpp" />
+    <ClCompile Include="floaty.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="probs.cpp" />
     <ClCompile Include="wfind.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="evens_to_front.h" />
     <ClInclude Include="exvol.h" />
     <ClInclude Include="classics.h" />
+    <ClInclude Include="floaty.h" />
     <ClInclude Include="probs.h" />
     <ClInclude Include="wfind.h" />
   </ItemGroup>
