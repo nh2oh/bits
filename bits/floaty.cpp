@@ -85,6 +85,12 @@ int test_required_digits() {
 	}
 	std::cout << "------------------------------------------------------" << std::endl;
 
+
+	//constexpr auto merrex = MATH_ERREXCEPT;
+	//constexpr auto merrno = MATH_ERRNO;
+	//constexpr auto merrh = math_errhandling;
+
+
 	return 0;
 }
 
