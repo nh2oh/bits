@@ -29,7 +29,7 @@ public:
 		while (cv>0) {
 			int rq_ndig = std::ceil(std::log2(cv+1)/std::log2(B));  // also the current digit number+1
 			int cd = cv%B;
-			cv -= cv/B;
+			cv /= B;
 			if (rq_ndig>Ps) {
 				// WE _might_ have to drop the LS-digits
 				if (cd != 0 || ndig_dropped>0) {
@@ -44,7 +44,7 @@ public:
 		while (vexp>0) {
 			int rq_ndig = std::ceil(std::log2(vexp+1)/std::log2(B));  // also the current digit number+1
 			int cd = vexp%B;
-			vexp -= vexp/B;
+			vexp /= B;
 			this->value[Ps+rq_ndig-1] = cd;
 		}
 

@@ -10,6 +10,12 @@ int test_floaty() {
 	f.set(5);
 	std::cout << f.print() << std::endl;
 
+	f.set(6);
+	std::cout << f.print() << std::endl;
+
+	f.set(7);
+	std::cout << f.print() << std::endl;
+
 	return 0;
 }
 
