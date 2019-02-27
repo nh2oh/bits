@@ -27,7 +27,7 @@ public:
 		int ndig_dropped = 0;
 		T cv = v;
 		while (cv>0) {
-			int rq_ndig = std::ceil(std::log2(cv)/std::log2(B));  // also the current digit number+1
+			int rq_ndig = std::ceil(std::log2(cv+1)/std::log2(B));  // also the current digit number+1
 			int cd = cv%B;
 			cv -= cv/B;
 			if (rq_ndig>Ps) {
@@ -40,9 +40,9 @@ public:
 			}
 		}
 
-		int vexp = std::ceil(std::log2(v)/std::log2(B))-1;  // n-digits needed for v => value for the exponent
+		int vexp = std::ceil(std::log2(v+1)/std::log2(B))-1;  // n-digits needed for v => value for the exponent
 		while (vexp>0) {
-			int rq_ndig = std::ceil(std::log2(vexp)/std::log2(B));  // also the current digit number+1
+			int rq_ndig = std::ceil(std::log2(vexp+1)/std::log2(B));  // also the current digit number+1
 			int cd = vexp%B;
 			vexp -= vexp/B;
 			this->value[Ps+rq_ndig-1] = cd;
@@ -75,5 +75,12 @@ private:
 
 int test_floaty();
 
+
+//
+// Computes the minimum number of digits required to represent arg1 (base 10) in the base
+// given by arg 2.  
+//
+int required_digits(int,int);
+int test_required_digits();
 
 
