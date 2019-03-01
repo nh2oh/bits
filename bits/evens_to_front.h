@@ -178,9 +178,15 @@ int test_reverse();
 
 //
 // shift_left
+// Swaps the elements [beg+n,end) with the elements [beg,end-(beg+n)).  In the new array,
+// the elements [beg,end-(beg+n)) and [beg+n,end) retain their initial order.  Returns 
+// an iterator to one past the last shifted value (== end-(beg+n)).  
 //
-// Returns an iterator to one past the last shifted value (== end - (beg+n)).
-// TODO: Check for n<0
+// Example:
+// v=[1,2,3,4,5,6,7,8,9]; auto r=dbk_shift_left(v.begin(),v.end(),6);  // note v[6] == 7
+// => v = [7,8,9,4,5,6,1,2,3]
+// => *r = 4
+// 
 template<typename It>
 It dbk_shift_left(It beg, It end, int n) {
 	if (n > (end-beg)) {
@@ -196,10 +202,73 @@ It dbk_shift_left(It beg, It end, int n) {
 }
 int test_dbk_shift_left();
 
+// 
+// Moves elem to the position indicated by beg; elements [beg,elem) retain their initial 
+// order.  Returns an iterator to one past beg (ie, one past the new position of elem).  
+//
+// TODO:  Overload to_front(It beg, It start, It end)  // moves [start,end) to front
+//
+template<typename It>
+It to_front(It beg, It elem) {
+	It prev=elem;
+	while (prev != beg) {
+		// prev==elem; prev!=beg; elem!=beg
+		--prev;
+		// prev==elem-1; prev _may_ == beg;  elem!=beg;
+		std::iter_swap(prev,elem);
+		if (prev==beg) {
+			break;
+		}
+		--elem;
+		// elem==prev; prev!=beg; elem!=beg;
+	}
+	return elem;
+
+	// Alternate form:
+	// The conditional break in the loop is needed, since decrementing past beg is illegal;
+	// on the final iteration, prev==beg upon entering the loop.  After iter_sawp(), 
+	// --elem => elem==beg
+	// (prev--!=beg) => false, but prev-- => prev=beg-1, which is illegal
+	//for (It prev=elem; prev--!=beg; --elem) {
+	//	// prev==elem-1;  prev _may_==beg;  elem!=beg
+	//	std::iter_swap(prev,elem);
+	//	if (prev==beg) { break; }
+	//}
+	//return elem;
+}
 
 
+//
+// Takes a _sorted_ array and moves all duplicate elements to the front of the array.  
+// Returns an iterator to the beginning of the sequence of non-duplicates (corresponding
+// to the end of the "duplicates" subarray).  The initial sorting order is maintained in
+// both subarrays.  
+//
+template<typename It>
+It dedup(It beg, It end) {
+	if (beg==end) {
+		return beg;
+	}
+	It curr = beg;
+	It next = curr;
+	while (++next!=end) {
+		// next == curr+1;
+		auto eb = end-beg;
+		auto ec = end-curr;
+		auto en = end-next;
+		if (*curr==*next) {
+			beg = to_front(beg,curr);  // beg points one past the new position of curr
+		}
+		eb = end-beg;
+		ec = end-curr;
+		en = end-next;
+		++curr;
+		// curr == next
+	}
+	return beg;
+}
 
-
+int test_dedup();
 
 
 

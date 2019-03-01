@@ -1,4 +1,5 @@
 #include "evens_to_front.h"
+#include "probs.h" // printv()
 #include <iostream>
 #include <string>
 #include <array>
@@ -553,6 +554,90 @@ int test_dbk_shift_left() {
 
 	return 0;
 }
+
+
+
+int test_dedup() {
+	std::vector<int> v {};
+	std::vector<int> ans {};
+	std::vector<int>::iterator r {};
+	std::vector<int>::iterator r_ans {};
+
+	/*v = std::vector<int> {0,1,2,3,4,5,6,7,8,9};
+	ans = v; r_ans = v.begin()+0;
+	std::cout << "v == " << printv(v) << ";  dedup(v) == ";
+	r = dedup(v.begin(),v.end());
+	std::cout << printv(v,r-v.begin()) << std::endl;
+	if (r!=r_ans) {
+		std::cout << "r!=r_ans";  std::abort();
+	}
+
+	v = std::vector<int> {0,1,2,2,3,4,5,6,7,8,9};
+	ans = std::vector<int> {2,0,1,2,3,4,5,6,7,8,9};  r_ans=v.begin()+1;
+	std::cout << "v == " << printv(v) << ";  dedup(v) == ";
+	r = dedup(v.begin(),v.end());
+	std::cout << printv(v,r-v.begin()) << std::endl;
+	if (r!=r_ans) {
+		std::cout << "r!=r_ans";  std::abort();
+	}
+
+	v = std::vector<int> {0,1,2,3,4,5,6,7,8,9,9};
+	ans = v; r_ans = v.begin()+1;
+	std::cout << "v == " << printv(v) << ";  dedup(v) == ";
+	r = dedup(v.begin(),v.end());
+	std::cout << printv(v,r-v.begin()) << std::endl;
+	if (r!=r_ans) {
+		std::cout << "r!=r_ans";  std::abort();
+	}
+
+	v = std::vector<int> {0,1,2,2,3,4,4,4,5,6,7,7,7,7,7,8,9};
+	ans = std::vector<int> {2,4,4,7,7,7,7,0,1,2,3,4,5,6,7,8,9};  r_ans=v.begin()+7;
+	std::cout << "v == " << printv(v) << ";  dedup(v) == ";
+	r = dedup(v.begin(),v.end());
+	std::cout << printv(v,r-v.begin()) << std::endl;
+	if (r!=r_ans) {
+		std::cout << "r!=r_ans";  std::abort();
+	}
+
+	v = std::vector<int> {};
+	ans = std::vector<int> {};  r_ans=v.begin()+0;
+	std::cout << "v == " << printv(v) << ";  dedup(v) == ";
+	r = dedup(v.begin(),v.end());
+	std::cout << printv(v,r-v.begin()) << std::endl;
+	if (r!=r_ans) {
+		std::cout << "r!=r_ans";  std::abort();
+	}*/
+
+
+	/*v = std::vector<int>   {1,2,3};
+	ans = std::vector<int> {3,1,2};  r_ans=v.begin()+1;  // *=>1
+	std::cout << "v == " << printv(v) << ";  to_front(v) == ";
+	r = to_front(v.begin(),v.begin()+2);
+	std::cout << printv(v,r-v.begin()) << std::endl;
+
+	std::cout << "v == " << printv(v) << ";  to_front(v) == ";
+	r = to_front(v.begin()+1,v.begin()+2);
+	std::cout << printv(v,r-v.begin()) << std::endl;
+	if (r!=r_ans) {
+		auto n = r-v.begin();
+		std::cout << "r!=r_ans";  std::abort();
+	}*/
+
+
+	v = std::vector<int>   {1,1,1};
+	ans = std::vector<int> {1,1,1};  r_ans=v.begin()+2;
+	std::cout << "v == " << printv(v) << ";  dedup(v) == ";
+	r = dedup(v.begin(),v.end());
+	std::cout << printv(v,r-v.begin()) << std::endl;
+	if (r!=r_ans) {
+		auto n = r-v.begin();
+		std::cout << "r!=r_ans";  std::abort();
+	}
+
+	return 0;
+}
+
+
 
 
 
