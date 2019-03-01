@@ -92,23 +92,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="algs_numeric.cpp" />
+    <ClCompile Include="array_algs.cpp" />
     <ClCompile Include="bitcounter.cpp" />
-    <ClCompile Include="evens_to_front.cpp" />
     <ClCompile Include="exvol.cpp" />
-    <ClCompile Include="classics.cpp" />
     <ClCompile Include="exvol_test.cpp" />
     <ClCompile Include="floaty.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="probs.cpp" />
+    <ClCompile Include="unsorted_probs.cpp" />
+    <ClCompile Include="str_algs.cpp" />
+    <ClCompile Include="vec_utils.cpp" />
     <ClCompile Include="wfind.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="algs_numeric.h" />
+    <ClInclude Include="array_algs.h" />
     <ClInclude Include="bitcounter.h" />
-    <ClInclude Include="evens_to_front.h" />
     <ClInclude Include="exvol.h" />
-    <ClInclude Include="classics.h" />
     <ClInclude Include="floaty.h" />
-    <ClInclude Include="probs.h" />
+    <ClInclude Include="unsorted_probs.h" />
+    <ClInclude Include="str_algs.h" />
+    <ClInclude Include="vec_utils.h" />
     <ClInclude Include="wfind.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

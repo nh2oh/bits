@@ -1,112 +1,87 @@
-//#pragma fenv_access (on)
-#include <string>
+#include "algs_numeric.h"
 #include <iostream>
+#include <array>
 #include <vector>
-#include <limits>
-#include <cmath> // std::log() in pwr3()
-//#include <cfenv>
-#include "probs.h"
+#include <string>
 
 
-// vector to be printed, optional int idx of an element to be printed w/a '*'
-std::string printv(const std::vector<int>& v, int idx_star) { 
-	std::string s {'{'};
-	for (const auto& e : v) {
-		s += std::to_string(e);
-		if (idx_star==0) {
-			s += '*';
-		}
-		s += ',';
-		--idx_star;
+bool test_inc_dec_arry() {
+	struct tests_four_t {
+		std::array<int,4> test {0,0,0,0};
+		std::array<int,4> ans {0,0,0,0};
+		bool ans_retval {false};
 	};
-	if (v.size()>0) {
-		s.pop_back();
-	}
-	s += '}';
-	return s;
-};
+	std::vector<tests_four_t> tests_four {
+		{{0,0,0,0},{0,0,0,1},true},
+		{{0,0,0,9},{0,0,1,0},true},
+		{{0,0,9,9},{0,1,0,0},true},
+		{{0,9,9,9},{1,0,0,0},true},
+		{{9,9,9,9},{0,0,0,0},false},
 
-
-
-int colid2int(const std::string& s) {
-	// Want A=>1, B=>2, AA=>27, ZZ=>702, etc.  There are 26 letters in the alphabet.  
-	int r = 0;
-	for (const auto& e : s) {
-		if (std::numeric_limits<int>::max()/26 < r) {
-			return 0;
+		{{1,2,3,4},{1,2,3,5},true},
+		{{4,3,2,1},{4,3,2,2},true},
+		{{1,1,8,9},{1,1,9,0},true},
+	};
+	
+	for (const auto& e : tests_four) {
+		std::array<int,4> curr_test_result = e.test;
+		bool curr_test_retval = inc_dec_arry(curr_test_result.begin(),curr_test_result.end());
+		if (curr_test_retval != e.ans_retval) {
+			std::cout << "test_inc_dec_arry():  curr_test_retval != e.ans_retval  TEST FAILED!" << std::endl;
+			return false;
 		}
-		r *= 26;
-		r += e - 'A' + 1;
+
+		if (curr_test_result != e.ans) {
+			std::cout << "test_inc_dec_arry():  curr_test_result != e.ans  TEST FAILED!" << std::endl;
+			return false;
+		}
 	}
 
-	return r;
+	std::cout << "test_inc_dec_arry():  All tests passed!" << std::endl;
+	return true;
 }
 
 
-int test_colid2int() {
-	if (colid2int("A") != 1) {
-		std::cout  << "Failed :(" << std::endl;
+// TODO:  Overflow
+int reverse_digits(int n) {
+	bool neg = n<0;
+	if (neg) { n *= -1; }
+	int nr {0};
+	while (n != 0) {
+		nr *= 10;
+		nr += n%10;
+		n /= 10;
 	}
-	if (colid2int("D") != 4) {
-		std::cout  << "Failed :(" << std::endl;
-	}
-	if (colid2int("AA") != 27) {
-		std::cout  << "Failed :(" << std::endl;
-	}
-	if (colid2int("ZZ") != 702) {
-		std::cout  << "Failed :(" << std::endl;
-	}
+
+	return neg ? -1*nr : nr;
+}
+
+int test_reverse_digits() {
+	int n {0};
+
+	n = 1234;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
+
+	n = 1324;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
+
+	n = 0;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
+
+	n = -4;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
+
+	n = -2365;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
+
+	// Overflow
+	n = 2147483647;
+	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
 
 	return 0;
 }
 
 
-int test_shift_to_end() {
-	std::vector<int> v_init {0,1,2,3,4,5,6,7,8,9};
-
-	for (int i=0; i<v_init.size(); ++i) {
-		auto v = v_init;
-		std::cout << printv(v,i) << " => ";
-		auto rv = shift_to_end(v.begin()+i,v.end());
-		std::cout << printv(v) << "; *rv== " << std::to_string(*rv) << std::endl;
-	}
-
-	return 0;
-}
-
-int test_dbkrot() {
-	std::vector<int> v_init {0,1,2,3,4,5,6,7,8,9};
-
-	for (int i=1; i<v_init.size(); ++i) {
-		auto v = v_init;
-		std::cout << printv(v,i) << " => ";
-		auto rv = dbkrot(v.begin(),v.end(),v.begin()+i);
-		std::cout << printv(v) << "; *rv== " << std::to_string(*rv) << std::endl;
-	}
-
-	return 0;
-}
-
-
-int test_reverse_chunk_order() {
-	std::string s {};
-	s = "alice likes bob fatty";
-	std::cout << "[" << s << "]" << " => ";
-	reverse_chunk_order(s.begin(),s.end(),' ');
-	std::cout << "[" << s << "]" << std::endl;
-
-	s = "alice likes  bob   fatty";
-	std::cout << "[" << s << "]" << " => ";
-	reverse_chunk_order(s.begin(),s.end(),' ');
-	std::cout << "[" << s << "]" << std::endl;
-
-	s = "     alice likes  bob   fatty";
-	std::cout << "[" << s << "]" << " => ";
-	reverse_chunk_order(s.begin(),s.end(),' ');
-	std::cout << "[" << s << "]" << std::endl;
-
-	return 0;
-}
 
 // n = 3^p ?
 //
@@ -207,5 +182,3 @@ int test_hamming_dist() {
 
 	return 0;
 }
-
-

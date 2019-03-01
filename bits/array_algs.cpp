@@ -1,12 +1,11 @@
-#include "evens_to_front.h"
-#include "probs.h" // printv()
-#include <iostream>
-#include <string>
-#include <array>
+#include "array_algs.h"
+#include "vec_utils.h"
 #include <vector>
+#include <iostream>
+#include <string>  // std::to_string()
+#include <exception>
 
 int test_evens_to_front() {
-	
 	std::vector<int> a {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
 	auto a_ev_end = evens_to_front(a.begin(),a.end());
 
@@ -163,45 +162,9 @@ int test_dnfp() {
 	std::cout << std::endl;
 
 	return 0;
-
 }
 
 
-bool test_inc_dec_arry() {
-	struct tests_four_t {
-		std::array<int,4> test {0,0,0,0};
-		std::array<int,4> ans {0,0,0,0};
-		bool ans_retval {false};
-	};
-	std::vector<tests_four_t> tests_four {
-		{{0,0,0,0},{0,0,0,1},true},
-		{{0,0,0,9},{0,0,1,0},true},
-		{{0,0,9,9},{0,1,0,0},true},
-		{{0,9,9,9},{1,0,0,0},true},
-		{{9,9,9,9},{0,0,0,0},false},
-
-		{{1,2,3,4},{1,2,3,5},true},
-		{{4,3,2,1},{4,3,2,2},true},
-		{{1,1,8,9},{1,1,9,0},true},
-	};
-	
-	for (const auto& e : tests_four) {
-		std::array<int,4> curr_test_result = e.test;
-		bool curr_test_retval = inc_dec_arry(curr_test_result.begin(),curr_test_result.end());
-		if (curr_test_retval != e.ans_retval) {
-			std::cout << "test_inc_dec_arry():  curr_test_retval != e.ans_retval  TEST FAILED!" << std::endl;
-			return false;
-		}
-
-		if (curr_test_result != e.ans) {
-			std::cout << "test_inc_dec_arry():  curr_test_result != e.ans  TEST FAILED!" << std::endl;
-			return false;
-		}
-	}
-
-	std::cout << "test_inc_dec_arry():  All tests passed!" << std::endl;
-	return true;
-}
 
 int test_insort() {
 	std::cout << "---------------------------------------------------\n"
@@ -262,204 +225,6 @@ int test_insort() {
 	insort(e.begin(),e.end());
 	std::cout << "e = " << printvec(e) << "\n";
 	std::cout << std::endl;
-
-	return 0;
-}
-
-
-
-//
-// Find unmatched parens
-//
-// Paren matching is "greedy;" that is, the partner ) for any given ( is the _closest_ ).  Thus, in
-// a(b(cd)efgh(i)jk, the unmatched ( is the one following the a, not the one following the b.  However,
-// this does not mean that in a str w/ an unmatched (, the very first ( is always the problem.  
-// Consider:
-// ab((cd)e)fgh(ijk
-// Here the unmatched ( follows the h.  
-// On the other hand, the very first "excess" ) is considered unmatched.  
-//
-std::string::const_iterator find_first_uparen(const std::string& s) {
-	int depth {0};
-	std::string::const_iterator first_open;
-	for (std::string::const_iterator it = s.cbegin(); it!=s.cend(); ++it) {
-		if (*it == '(') {
-			++depth;
-			if (depth == 1) {
-				first_open = it;
-			}
-		} else if (*it == ')') {
-			--depth;
-		}
-
-		if (depth == -1) {
-			return it;
-		}
-	}
-	
-	if (depth > 0) {
-		return first_open;
-	} else {
-		return s.cend();
-	}
-}
-
-int test_find_first_uparen() {
-	std::string s {};
-	std::string::const_iterator it {};
-
-	s = "ab((cd)e)fgh(ijk";
-	it = find_first_uparen(s);
-	s.insert(it,1,'*');
-	std::cout << s << std::endl;
-
-	s = "a(b(cd)efgh(i)jk";
-	it = find_first_uparen(s);
-	s.insert(it,1,'*');
-	std::cout << s << std::endl;
-
-	s = "a()(b(cd)efgh(i)jk";
-	it = find_first_uparen(s);
-	s.insert(it,1,'*');
-	std::cout << s << std::endl;
-
-	// None unmatched
-	s = "a()(b(cd)efgh(i))jk";
-	it = find_first_uparen(s);
-	s.insert(it,1,'*');
-	std::cout << s << std::endl;
-
-	s = "a()(b(cd)efgh(i))j)k";
-	it = find_first_uparen(s);
-	s.insert(it,1,'*');
-	std::cout << s << std::endl;
-
-	s.clear();
-	it = find_first_uparen(s);
-	s.insert(it,1,'*');
-	std::cout << s << std::endl;
-
-	s = "no parens at all!";
-	it = find_first_uparen(s);
-	s.insert(it,1,'*');
-	std::cout << s << std::endl;
-
-	return 0;
-}
-
-
-
-std::string reverse_words(const std::string& s) {
-	std::string result {};  result.reserve(s.size());
-	int curr_word_len {0};
-	for (std::string::const_reverse_iterator rit=s.crbegin(); rit!=s.crend(); ++rit) {
-		if (*rit == ' ') {
-			if (curr_word_len > 0) {
-				// NB rit.base() returns an iterator to the first letter in the word, even though
-				// *rit == ' '.  
-				std::string::const_iterator w_start = rit.base();
-				std::string::const_iterator w_end = w_start; w_end+=curr_word_len;
-				result.insert(result.end(), w_start, w_end);
-				result.append(1,' ');
-			}
-			curr_word_len = 0;
-		} else {
-			++curr_word_len;
-		}
-	}
-	// For s which do not begin with spaces, the very first word of s is not appended to result since 
-	// the loop conditional only triggers when *rit == ' '.  It is possible to modify the conditional 
-	// to triger when (*rit == ' ' || rit == s.crend()-1), however, for rit -> the first letter of the
-	// first word in s, w_start would then point to the _second_ letter of the first word in s (see 
-	// the note in the loop conditional).  
-	if (curr_word_len > 0) {
-		std::string::const_iterator w_start = s.cbegin();
-		std::string::const_iterator w_end = w_start; w_end+=curr_word_len;
-		result.insert(result.end(), w_start, w_end);
-	}
-
-	if (result.size() > 0 && result.back() == ' ') {
-		// If s begins w/ leading spaces then the first word is appended to result by the loop, not
-		// the post-loop conditional and a space will be appended to the first word in result, which
-		// needs to be removed.  
-		result.pop_back();
-	}
-	return result;
-}
-
-int test_reverse_words() {
-	std::string s {};
-
-	s = "Paren matching is \"greedy;\" that";
-	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
-
-	s = "Paren matching is \"greedy;\" that     ";
-	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
-	
-	s = "     Paren matching is \"greedy;\" that     ";
-	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
-
-	s.clear();
-	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
-
-	s = "  ";
-	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
-
-	s = " ";
-	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
-
-	s = "onewordonly";
-	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
-
-	s = "a b c";
-	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
-
-	s = "x";
-	std::cout << "\"" << s << "\"" << "  =>  " << "\"" << reverse_words(s) << "\"" << std::endl;
-
-	return 0;
-}
-
-
-
-
-
-// TODO:  Overflow
-int reverse_digits(int n) {
-	bool neg = n<0;
-	if (neg) { n *= -1; }
-	int nr {0};
-	while (n != 0) {
-		nr *= 10;
-		nr += n%10;
-		n /= 10;
-	}
-
-	return neg ? -1*nr : nr;
-}
-
-int test_reverse_digits() {
-
-	int n {0};
-
-	n = 1234;
-	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
-
-	n = 1324;
-	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
-
-	n = 0;
-	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
-
-	n = -4;
-	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
-
-	n = -2365;
-	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
-
-	// Overflow
-	n = 2147483647;
-	std::cout << std::to_string(n) << " => " << std::to_string(reverse_digits(n)) << std::endl;
 
 	return 0;
 }
@@ -555,6 +320,33 @@ int test_dbk_shift_left() {
 	return 0;
 }
 
+
+int test_shift_to_end() {
+	std::vector<int> v_init {0,1,2,3,4,5,6,7,8,9};
+
+	for (int i=0; i<v_init.size(); ++i) {
+		auto v = v_init;
+		std::cout << printv(v,i) << " => ";
+		auto rv = shift_to_end(v.begin()+i,v.end());
+		std::cout << printv(v) << "; *rv== " << std::to_string(*rv) << std::endl;
+	}
+
+	return 0;
+}
+
+
+int test_dbkrot() {
+	std::vector<int> v_init {0,1,2,3,4,5,6,7,8,9};
+
+	for (int i=1; i<v_init.size(); ++i) {
+		auto v = v_init;
+		std::cout << printv(v,i) << " => ";
+		auto rv = dbkrot(v.begin(),v.end(),v.begin()+i);
+		std::cout << printv(v) << "; *rv== " << std::to_string(*rv) << std::endl;
+	}
+
+	return 0;
+}
 
 
 int test_dedup() {

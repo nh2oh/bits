@@ -24,22 +24,28 @@
     <ClCompile Include="wfind.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="evens_to_front.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="exvol.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="classics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="exvol_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="probs.cpp">
+    <ClCompile Include="floaty.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="floaty.cpp">
+    <ClCompile Include="array_algs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vec_utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="str_algs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="algs_numeric.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="unsorted_probs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,19 +56,25 @@
     <ClInclude Include="wfind.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="evens_to_front.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="exvol.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="classics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="probs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="floaty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="array_algs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vec_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="str_algs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="algs_numeric.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unsorted_probs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
