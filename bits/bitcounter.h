@@ -4,6 +4,7 @@
 #include <array>
 #include <iostream>
 #include <cstring>  // std::memcpy()
+#include <type_traits>  // std::is_trivially_copyable_v
 
 //
 // The code for T *change_object_type(U *p) below is taken from:
@@ -82,7 +83,7 @@
 template<typename T, typename U>
 T *change_object_type(U *p) {
 	static_assert(sizeof(T) == sizeof(U));
-	static_assert(is_trivially_copyable_v<T> && is_trivially_copyable_v<U>);
+	static_assert(std::is_trivially_copyable_v<T> && std::is_trivially_copyable_v<U>);
 	char buffer[sizeof(T)];
 	std::memcpy(buffer, p, sizeof(T));
 	p->~U();
@@ -109,6 +110,7 @@ int ones(T in) {
 
 	int count {0};
 	for (int i=0; i<sizeof(T); ++i) {
+		static_assert(false,"j<nbits(unsigned char) ???");
 		unsigned char mask {1};
 		for (int j=0; j<nbits(in); ++j) {
 			if (mask & *p) { ++count; }
