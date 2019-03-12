@@ -48,6 +48,9 @@
     <ClCompile Include="unsorted_probs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bigint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitcounter.h">
@@ -75,6 +78,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="unsorted_probs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bigint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

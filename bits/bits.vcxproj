@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClCompile Include="algs_numeric.cpp" />
     <ClCompile Include="array_algs.cpp" />
+    <ClCompile Include="bigint.cpp" />
     <ClCompile Include="bitcounter.cpp" />
     <ClCompile Include="exvol.cpp" />
     <ClCompile Include="exvol_test.cpp" />
@@ -107,6 +108,7 @@
   <ItemGroup>
     <ClInclude Include="algs_numeric.h" />
     <ClInclude Include="array_algs.h" />
+    <ClInclude Include="bigint.h" />
     <ClInclude Include="bitcounter.h" />
     <ClInclude Include="exvol.h" />
     <ClInclude Include="floaty.h" />

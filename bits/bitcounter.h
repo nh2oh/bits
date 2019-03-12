@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstring>  // std::memcpy()
 #include <type_traits>  // std::is_trivially_copyable_v
+#include <limits>
 
 //
 // The code for T *change_object_type(U *p) below is taken from:
@@ -110,9 +111,9 @@ int ones(T in) {
 
 	int count {0};
 	for (int i=0; i<sizeof(T); ++i) {
-		static_assert(false,"j<nbits(unsigned char) ???");
+		//static_assert(false,"j<nbits(unsigned char) ???");
 		unsigned char mask {1};
-		for (int j=0; j<nbits(in); ++j) {
+		for (int j=0; j<CHAR_BIT; ++j) {
 			if (mask & *p) { ++count; }
 			mask = mask << 1;
 		}
