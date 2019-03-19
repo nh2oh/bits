@@ -54,7 +54,16 @@ int64_t significand_x8664(double d) {
 			s &= 0x0Fu;
 		}
 	}
-	return static_cast<int64_t>(s>>4);
+	if (*(p+7)&0x80u) {
+		return -1*static_cast<int64_t>(s>>4);
+	} else {
+		return static_cast<int64_t>(s>>4);
+	}
+}
+
+uint8_t signbit_x8664(double d) {
+	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
+	return static_cast<uint8_t>((*(p+7)&0x80u)>>7);
 }
 
 int test_exponent_x8664() {

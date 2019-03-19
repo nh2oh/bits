@@ -79,6 +79,7 @@ int test_floaty();
 uint16_t exponent_biased_x8664(double);
 int32_t exponent_unbiased_x8664(double);
 int64_t significand_x8664(double);
+uint8_t signbit_x8664(double);
 int test_exponent_x8664();
 
 
