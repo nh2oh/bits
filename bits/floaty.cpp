@@ -1,8 +1,10 @@
 #include "floaty.h"
+#include "bitcounter.h"
 #include <iostream>
 #include <cmath>
 #include <vector>
 #include <string>
+#include <cstdint>
 
 int test_floaty() {
 	floaty<2,4,2> f;
@@ -20,6 +22,80 @@ int test_floaty() {
 }
 
 
+uint16_t exponent_biased_x8664(double d) {
+	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
+	uint16_t e {0};
+	p += 7;
+	//std::cout << "e=" << bitprinter(e) << std::endl;
+	e += (*p & 0x7Fu);
+	//std::cout << "e+=(*p&0x7Fu); => e=" << bitprinter(e) << "=> " << e << std::endl;
+	e <<= 8;
+	//std::cout << "e<<=8; => e=" << bitprinter(e) << "=> " << e << std::endl;
+	--p; e += *p;
+	//std::cout << "--p; e+=*p; => e=" << bitprinter(e) << "=> " << e << std::endl;
+	e>>=4;
+	//std::cout << "e>>=4; => e=" << bitprinter(e) << "=> " << e << std::endl;
+	return e;
+}
+
+int32_t exponent_unbiased_x8664(double d) {
+	auto eb = exponent_biased_x8664(d);
+	int32_t e = static_cast<int32_t>(eb)-1023;
+	return e;
+}
+
+int64_t significand_x8664(double d) {
+	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
+	uint64_t s {0};
+	for (int i=6; i>=0; --i) {
+		s<<=8;
+		s += *(p+i);
+		if (i==6) {
+			s &= 0x0Fu;
+		}
+	}
+	return static_cast<int64_t>(s>>4);
+}
+
+int test_exponent_x8664() {
+	int32_t eu {0};
+	uint16_t eb {0};
+	int64_t s {0};
+	//double d {0.0};
+	
+	//d = 0.0;
+	//std::cout << "d== " << std::to_string(d) << " => [" << bitprinter(d) << "]\n\t"
+	//	<< "=> exponent== " << exponent_x8664(d) << std::endl;
+	
+
+	std::vector<double> tests {0.0,1.0,2.0,4.0};
+	for (const auto& d : tests) {
+		eu = exponent_unbiased_x8664(d);
+		eb = exponent_biased_x8664(d);
+		s = significand_x8664(d);
+		std::cout << "d== " << std::to_string(d) << " => [" << bitprinter(d) << "]\n"
+			<< "\t=> exponent biased == " << eb << " => [" << bitprinter(eb) << "]\n"
+			<< "\t=> exponent unbiased == " << eu << " => [" << bitprinter(eu) << "]\n"
+			<< "\t=> significand == " << s << " => [" << bitprinter(s) << "]\n"
+			<< std::endl << std::endl;
+	}
+
+	auto dd = 2.0;
+	/*
+	std::cout << "d== " << std::to_string(d) << " => [" << bitprinter(d) << "]\n\t"
+		<< "=> exponent== " << exponent_x8664(d) << std::endl;
+	
+	d = 4.0;
+	std::cout << "d== " << std::to_string(d) << " => [" << bitprinter(d) << "]\n\t"
+		<< "=> exponent== " << exponent_x8664(d) << std::endl;
+	
+	d = 1024.0;
+	std::cout << "d== " << std::to_string(d) << " => [" << bitprinter(d) << "]\n\t"
+		<< "=> exponent== " << exponent_x8664(d) << std::endl;
+	//auto i = exponent_x8664(d);
+	*/
+	return 0;
+}
 
 int required_digits(int n, int db) {  // number, dest base
 	if (db <= 1 || n < 0) {

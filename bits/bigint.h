@@ -3,7 +3,7 @@
 #include <array>
 #include <vector>
 #include <cstdint>
-
+/*
 template<int N>
 class bigint {
 public:
@@ -24,14 +24,14 @@ public:
 			int s = this->d_[i] + rhs.d_[i] + c;
 			this->d_[i] = s%256;
 			c = s/256;
-			/*int s = this->d_[i] + rhs.d_[i] + c;
-			c = s - std::numeric_limits<uint8_t>::max();
-			if (c > 0) {
-				s = std::numeric_limits<uint8_t>::max();
-			} else {
-				c = 0;
-			}
-			this->d_[i] = s;*/
+			//int s = this->d_[i] + rhs.d_[i] + c;
+			//c = s - std::numeric_limits<uint8_t>::max();
+			//if (c > 0) {
+			//	s = std::numeric_limits<uint8_t>::max();
+			//} else {
+			//	c = 0;
+			//}
+			//this->d_[i] = s;
 		}
 		//if (c>0) {
 		//	// overflow
@@ -72,5 +72,5 @@ private:
 
 std::string print_b256(int);
 int test_print_b256();
-
+*/
 

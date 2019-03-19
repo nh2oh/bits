@@ -3,7 +3,9 @@
 #include <cstdint>
 #include <string>
 #include <cmath>
+#include <cstdint>
 
+// B => base, Ps => Prec significand, Pexp => Prec exponent
 template<int8_t B, int8_t Ps, int8_t Pexp>
 class floaty {
 public:
@@ -40,7 +42,7 @@ public:
 			}
 		}
 
-		int vexp = std::ceil(std::log2(v+1)/std::log2(B))-1;  // n-digits needed for v => value for the exponent
+		int vexp = std::ceil(std::log2(v+1)/std::log2(B))-1;  // n-digits needed for vexp => value for the exponent
 		while (vexp>0) {
 			int rq_ndig = std::ceil(std::log2(vexp+1)/std::log2(B));  // also the current digit number+1
 			int cd = vexp%B;
@@ -74,6 +76,10 @@ private:
 };
 
 int test_floaty();
+uint16_t exponent_biased_x8664(double);
+int32_t exponent_unbiased_x8664(double);
+int64_t significand_x8664(double);
+int test_exponent_x8664();
 
 
 //

@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <iostream>
 
-
+/*
 std::string print_factorial(int n) {
 	std::string s {};
 
@@ -71,7 +71,7 @@ int test_print_b256() {
 	return 0;
 }
 
-
+*/
 
 
 
