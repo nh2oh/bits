@@ -68,7 +68,7 @@ int test_exponent_x8664() {
 	//	<< "=> exponent== " << exponent_x8664(d) << std::endl;
 	
 
-	std::vector<double> tests {0.0,1.0,2.0,4.0};
+	std::vector<double> tests {-2.0,0.0,1.0,2.0,4.0};
 	for (const auto& d : tests) {
 		eu = exponent_unbiased_x8664(d);
 		eb = exponent_biased_x8664(d);
