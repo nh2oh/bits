@@ -25,17 +25,38 @@ int test_floaty() {
 uint16_t exponent_biased_x8664(double d) {
 	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
 	uint16_t e {0};
+	// Those bits marked * belong to the exponent; those marked & belong to the
+	// significand.  s is the sign-bit for the significand
+	//         LSB-exp  MSB-exp
+	//          ****&&&& s*******
+	// [...|...|01234567|01234567]
+	
 	p += 7;
 	//std::cout << "e=" << bitprinter(e) << std::endl;
-	e += (*p & 0x7Fu);
+	e += (*p & 0x7Fu);  // mask off the sign bit
 	//std::cout << "e+=(*p&0x7Fu); => e=" << bitprinter(e) << "=> " << e << std::endl;
-	e <<= 8;
+	e <<= 8;  
+	//                s*******
+	// e == [00000000|01234567]
 	//std::cout << "e<<=8; => e=" << bitprinter(e) << "=> " << e << std::endl;
 	--p; e += *p;
+	//       ****&&&& s*******
+	// e == [01234567|01234567]
 	//std::cout << "--p; e+=*p; => e=" << bitprinter(e) << "=> " << e << std::endl;
 	e>>=4;
+	//       ********     s***
+	// e == [45670123|00000123]
 	//std::cout << "e>>=4; => e=" << bitprinter(e) << "=> " << e << std::endl;
 	return e;
+}
+
+uint16_t exponent_biased_x8664_m2(double d) {
+	const uint64_t *ep = static_cast<uint64_t*>(static_cast<void*>(&d));
+	uint64_t e = *ep;
+	e<<=1;
+	e>>=53;  // shr by 53, not 52, b/c above I shl by 1
+	// Alternate:  e&=0x7FFFFFFFFFFFFFFFu; e>>=52;
+	return static_cast<uint16_t>(e);	
 }
 
 int32_t exponent_unbiased_x8664(double d) {
@@ -69,21 +90,18 @@ uint8_t signbit_x8664(double d) {
 int test_exponent_x8664() {
 	int32_t eu {0};
 	uint16_t eb {0};
+	uint16_t ebm2 {0};
 	int64_t s {0};
-	//double d {0.0};
-	
-	//d = 0.0;
-	//std::cout << "d== " << std::to_string(d) << " => [" << bitprinter(d) << "]\n\t"
-	//	<< "=> exponent== " << exponent_x8664(d) << std::endl;
-	
 
 	std::vector<double> tests {-2.0,0.0,1.0,2.0,4.0};
 	for (const auto& d : tests) {
 		eu = exponent_unbiased_x8664(d);
 		eb = exponent_biased_x8664(d);
+		ebm2 = exponent_biased_x8664_m2(d);
 		s = significand_x8664(d);
 		std::cout << "d== " << std::to_string(d) << " => [" << bitprinter(d) << "]\n"
 			<< "\t=> exponent biased == " << eb << " => [" << bitprinter(eb) << "]\n"
+			<< "\t=> exponent biased m2 == " << ebm2 << " => [" << bitprinter(ebm2) << "]\n"
 			<< "\t=> exponent unbiased == " << eu << " => [" << bitprinter(eu) << "]\n"
 			<< "\t=> significand == " << s << " => [" << bitprinter(s) << "]\n"
 			<< std::endl << std::endl;
@@ -179,4 +197,19 @@ int test_required_digits() {
 	return 0;
 }
 
+
+
+//
+// FP notes:
+// -p8:  If e==emin the number is denormal
+// -p10f:  Underflow => the result is subnormal _and_ inexact
+// -p10,11:  For correct rounding and no overflow and no underflow, 
+//  relative error of an operation is bounded by:
+//  RN => (1/2)*B^(1-p)
+//  RD,RU,RZ => B^(p-1)
+// -p.11:  For FP numbers x,y where x/2 <= y <= 2*x, x-y if an FP number;
+//  rounding mode is irrelevant (ie, x-y is exact).  
+//
+//
+//
 
