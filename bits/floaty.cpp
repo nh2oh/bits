@@ -66,19 +66,13 @@ int32_t exponent_unbiased_x8664(double d) {
 }
 
 int64_t significand_x8664(double d) {
-	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
-	uint64_t s {0};
-	for (int i=6; i>=0; --i) {
-		s<<=8;
-		s += *(p+i);
-		if (i==6) {
-			s &= 0x0Fu;
-		}
-	}
-	if (*(p+7)&0x80u) {
-		return -1*static_cast<int64_t>(s>>4);
+	//const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
+	uint64_t *pur = static_cast<uint64_t*>(static_cast<void*>(&d));
+	uint64_t uresult = (*pur)&0x000FFFFFFFFFFFFFu;
+	if ((*pur)>>=63) {  // Negative
+		return -1*static_cast<int64_t>(uresult);
 	} else {
-		return static_cast<int64_t>(s>>4);
+		return static_cast<int64_t>(uresult);
 	}
 }
 
@@ -91,18 +85,21 @@ int test_exponent_x8664() {
 	int32_t eu {0};
 	uint16_t eb {0};
 	uint16_t ebm2 {0};
+	uint8_t sb {0};
 	int64_t s {0};
 
-	std::vector<double> tests {-2.0,0.0,1.0,2.0,4.0};
+	std::vector<double> tests {-2.0,0.0,0.1,1.0,2.0,4.0,6.0};
 	for (const auto& d : tests) {
 		eu = exponent_unbiased_x8664(d);
 		eb = exponent_biased_x8664(d);
 		ebm2 = exponent_biased_x8664_m2(d);
+		sb = signbit_x8664(d);
 		s = significand_x8664(d);
 		std::cout << "d== " << std::to_string(d) << " => [" << bitprinter(d) << "]\n"
 			<< "\t=> exponent biased == " << eb << " => [" << bitprinter(eb) << "]\n"
 			<< "\t=> exponent biased m2 == " << ebm2 << " => [" << bitprinter(ebm2) << "]\n"
 			<< "\t=> exponent unbiased == " << eu << " => [" << bitprinter(eu) << "]\n"
+			<< "\t=> signbit == " << std::to_string(sb) << " => [" << bitprinter(sb) << "]\n"
 			<< "\t=> significand == " << s << " => [" << bitprinter(s) << "]\n"
 			<< std::endl << std::endl;
 	}
