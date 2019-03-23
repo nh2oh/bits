@@ -84,6 +84,8 @@ uint8_t signbit_x8664(double);
 bool isnan(double);
 int test_exponent_x8664();
 
+int probe_radix();
+int test_probe_radix();
 
 //
 // Computes the minimum number of digits required to represent arg1 (base 10) in the base

@@ -261,3 +261,24 @@ int test_required_digits() {
 //
 //
 
+
+// TODO:  This succeeds for doubles but fails for floats
+int probe_radix() {
+	double a = 1.0;
+	double b = 1.0;
+
+	while (((a+1.0)-a)-1.0 == 0.0) {
+		a *= 2;
+	}
+	while (((a+b)-a)-b != 0.0) {
+		b += 1.0;
+	}
+
+	return b;
+}
+
+int test_probe_radix() {
+	std::cout << "probe_radix() == " << probe_radix() << std::endl;
+
+	return 0;
+}
