@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include <cstdint>
+#include <cmath>
+#include <cstdlib>
 
 int test_floaty() {
 	floaty<2,4,2> f;
@@ -114,6 +116,7 @@ uint8_t signbit_x8664(double d) {
 }
 
 // TODO:  Untested
+// TODO:  A nan must not have all 0's in the significand
 bool isnan(double d) {
 	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
 	p += sizeof(double)-1;
@@ -139,7 +142,13 @@ int test_exponent_x8664() {
 	uint8_t sb {0};
 	int64_t s {0};
 
-	std::vector<double> tests {-2.0,0.0,0.1,1.0,2.0,4.0,6.0};
+	std::vector<double> tests {
+		std::numeric_limits<double>::lowest(), std::numeric_limits<double>::min(),
+		-2.0,0.0,0.1,1.0,2.0,4.0,6.0,
+		std::numeric_limits<double>::max(),
+		std::numeric_limits<double>::quiet_NaN(),
+		std::numeric_limits<double>::signaling_NaN()
+	};
 	for (const auto& d : tests) {
 		eu = exponent_unbiased_x8664(d);
 		eb = exponent_biased_x8664(d);
@@ -262,18 +271,24 @@ int test_required_digits() {
 //
 
 
-// TODO:  This succeeds for doubles but fails for floats
 int probe_radix() {
+	// w/o defining vars for 0.0, 1.0, if double is changed to float, statements
+	// such as a+1.0 involve first converting a to a double (since 1.0 => double),
+	// adding, then downcasting.  
+	const double one = 1.0;
+	const double zero = 0.0;
 	double a = 1.0;
 	double b = 1.0;
 
-	while (((a+1.0)-a)-1.0 == 0.0) {
+	while (((a+one)-a)-one == zero) {
 		a *= 2;
 	}
-	while (((a+b)-a)-b != 0.0) {
-		b += 1.0;
+	while (((a+b)-a)-b != zero) {
+		b += one;
 	}
 
+	auto anext = std::nextafter(a,10*a);
+	auto anma = anext-a;
 	return b;
 }
 
