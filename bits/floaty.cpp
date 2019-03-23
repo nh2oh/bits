@@ -51,12 +51,27 @@ uint16_t exponent_biased_x8664(double d) {
 }
 
 uint16_t exponent_biased_x8664_m2(double d) {
-	const uint64_t *ep = static_cast<uint64_t*>(static_cast<void*>(&d));
-	uint64_t e = *ep;
-	e<<=1;
-	e>>=53;  // shr by 53, not 52, b/c above I shl by 1
-	// Alternate:  e&=0x7FFFFFFFFFFFFFFFu; e>>=52;
-	return static_cast<uint16_t>(e);	
+	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
+	uint64_t e {0};
+
+	// The loop below assumes doubles are LE-encoded
+	static_assert(sizeof(double)==sizeof(uint64_t));
+	for (int i=sizeof(double)-1; i>=0; --i) {
+		e <<= 8;
+		e += *(p+i);
+	}
+	
+	e <<= 1;  // shift off the sign bit
+	e >>= 53;  // shr by 53, not 52, b/c above i shl by 1
+	return static_cast<uint16_t>(e);
+
+	// Illegal method that voilates aliasing rules
+	//const uint64_t *p2 = static_cast<uint64_t*>(static_cast<void*>(&d));
+	//uint64_t e2 = *p2;
+	//e2<<=1;  // shift off the sign bit
+	//e2>>=53;  // shr by 53, not 52, b/c above I shl by 1
+	//// Alternate:  e&=0x7FFFFFFFFFFFFFFFu; e>>=52;
+	//return static_cast<uint16_t>(e);
 }
 
 int32_t exponent_unbiased_x8664(double d) {
@@ -66,19 +81,55 @@ int32_t exponent_unbiased_x8664(double d) {
 }
 
 int64_t significand_x8664(double d) {
-	//const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
-	uint64_t *pur = static_cast<uint64_t*>(static_cast<void*>(&d));
-	uint64_t uresult = (*pur)&0x000FFFFFFFFFFFFFu;
-	if ((*pur)>>=63) {  // Negative
-		return -1*static_cast<int64_t>(uresult);
-	} else {
-		return static_cast<int64_t>(uresult);
+	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
+	uint64_t us {0};  // us => "unsigned significand"
+
+	// The loop below assumes doubles are LE-encoded
+	static_assert(sizeof(double)==sizeof(uint64_t));
+	for (int i=sizeof(double)-1; i>=0; --i) {
+		us <<= 8;
+		us += *(p+i);
 	}
+
+	if (us>>63) {  // Negative
+		return -1*static_cast<int64_t>(us&0x000FFFFFFFFFFFFFu);
+	} else {
+		return static_cast<int64_t>(us&0x000FFFFFFFFFFFFFu);
+	}
+
+	// Illegal method that violates aliasing rules
+	//uint64_t *pur = static_cast<uint64_t*>(static_cast<void*>(&d));
+	//uint64_t uresult = (*pur)&0x000FFFFFFFFFFFFFu;
+	//if ((*pur)>>=63) {  // Negative
+	//	return -1*static_cast<int64_t>(uresult);
+	//} else {
+	//	return static_cast<int64_t>(uresult);
+	//}
 }
 
 uint8_t signbit_x8664(double d) {
 	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
-	return static_cast<uint8_t>((*(p+7)&0x80u)>>7);
+	p += sizeof(double)-1;
+	return static_cast<uint8_t>((*p)>>7);
+}
+
+// TODO:  Untested
+bool isnan(double d) {
+	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
+	p += sizeof(double)-1;
+	uint16_t highbits {0};
+	highbits += *p;  highbits<<=8;
+	highbits += *--p;
+
+	highbits&=0x7FFFu;  // masks off the sign bit
+	highbits>>=4;  // shift off the 4 bytes of significand
+	return highbits==0x0FFF;
+
+	// Illegal method that violates aliasing rules
+	//const uint64_t *pu = static_cast<uint64_t*>(static_cast<void*>(&d));
+	//uint64_t e = (*pu)&0x7FFFFFFFFFFFFFFFu;
+	//e>>=52;
+	//return (e==0x00000000000007FFu);
 }
 
 int test_exponent_x8664() {
