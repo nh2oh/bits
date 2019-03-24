@@ -80,6 +80,7 @@ uint16_t exponent_biased_x8664(double);
 uint16_t exponent_biased_x8664_m2(double);
 int32_t exponent_unbiased_x8664(double);
 int64_t significand_x8664(double);
+uint64_t raw_significand_x8664(double);
 uint8_t signbit_x8664(double);
 bool isnan(double);
 int test_exponent_x8664();

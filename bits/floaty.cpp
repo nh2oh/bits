@@ -85,15 +85,29 @@ int32_t exponent_unbiased_x8664(double d) {
 
 //
 // For an IEEE-754/64 float x = M*2^e, the largest possible M is:
-// M_max == 0x1F'FF'FF'FF'FF'FF'FFu == 2^53-1
-// (the leading 3 bits of the MSB belong to the exponent; the bit following 
-// those three is the sign bit, corresponding to the '1' in the hex string 
-// above).  M_max above corresponds to the greatest magnitude _negative_ 
-// number, since it has its sign bit set.  The largest positive number is
-// M == 0x0F'FF'FF'FF'FF'FF'FFu == 2^52-1
-// 
+// M_max == 0x00'0F'FF'FF'FF'FF'FF'FFu == 2^52-1 == 4503599627370495
+// The leading bit of the MSB is the sign bit; the remainder of the unset bits
+// in the leading bytes above belong to the exponent.  Note that in the 
+// IEEE754 format, the sign bit "belongs" to the significand, but is physcially
+// seperate from the 52 bits of the significand.  The largest magnitude number 
+// has all significand bits set, as shown above; this magnitude is the same for
+// std::numeric_limits<double>::lowest() and std::numeric_limits<double>::max().  
 //
-//
+uint64_t raw_significand_x8664(double d) {
+	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
+	uint64_t us {0};  // us => "unsigned significand"
+
+	// The loop below assumes doubles are LE-encoded
+	static_assert(sizeof(double)==sizeof(uint64_t));
+	for (int i=sizeof(double)-1; i>=0; --i) {
+		us <<= 8;
+		us += *(p+i);
+	}
+
+	return us&0x000FFFFFFFFFFFFFu;
+}
+
+
 int64_t significand_x8664(double d) {
 	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
 	uint64_t us {0};  // us => "unsigned significand"
@@ -110,15 +124,6 @@ int64_t significand_x8664(double d) {
 	} else {
 		return static_cast<int64_t>(us&0x000FFFFFFFFFFFFFu);
 	}
-
-	// Illegal method that violates aliasing rules
-	//uint64_t *pur = static_cast<uint64_t*>(static_cast<void*>(&d));
-	//uint64_t uresult = (*pur)&0x000FFFFFFFFFFFFFu;
-	//if ((*pur)>>=63) {  // Negative
-	//	return -1*static_cast<int64_t>(uresult);
-	//} else {
-	//	return static_cast<int64_t>(uresult);
-	//}
 }
 
 uint8_t signbit_x8664(double d) {
@@ -153,6 +158,7 @@ int test_exponent_x8664() {
 	uint16_t ebm2 {0};
 	uint8_t sb {0};
 	int64_t s {0};
+	uint64_t rws {0};
 
 	std::vector<double> tests {
 		std::numeric_limits<double>::lowest(), std::numeric_limits<double>::min(),
@@ -166,12 +172,14 @@ int test_exponent_x8664() {
 		eb = exponent_biased_x8664(d);
 		ebm2 = exponent_biased_x8664_m2(d);
 		sb = signbit_x8664(d);
+		rws = raw_significand_x8664(d);
 		s = significand_x8664(d);
 		std::cout << "d== " << std::to_string(d) << " => [" << bitprinter(d) << "]\n"
 			<< "\t=> exponent biased == " << eb << " => [" << bitprinter(eb) << "]\n"
 			<< "\t=> exponent biased m2 == " << ebm2 << " => [" << bitprinter(ebm2) << "]\n"
 			<< "\t=> exponent unbiased == " << eu << " => [" << bitprinter(eu) << "]\n"
 			<< "\t=> signbit == " << std::to_string(sb) << " => [" << bitprinter(sb) << "]\n"
+			<< "\t=> raw significand == " << rws << " => [" << bitprinter(rws) << "]\n"
 			<< "\t=> significand == " << s << " => [" << bitprinter(s) << "]\n"
 			<< std::endl << std::endl;
 	}
