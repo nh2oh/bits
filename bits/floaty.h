@@ -83,6 +83,8 @@ int64_t significand_x8664(double);
 uint64_t raw_significand_x8664(double);
 uint8_t signbit_x8664(double);
 bool isnan(double);
+bool isdenorm(double);
+std::string print_fpclassify(double);
 int test_exponent_x8664();
 
 int probe_radix();

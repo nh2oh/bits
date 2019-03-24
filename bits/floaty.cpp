@@ -66,14 +66,6 @@ uint16_t exponent_biased_x8664_m2(double d) {
 	e <<= 1;  // shift off the sign bit
 	e >>= 53;  // shr by 53, not 52, b/c above i shl by 1
 	return static_cast<uint16_t>(e);
-
-	// Illegal method that voilates aliasing rules
-	//const uint64_t *p2 = static_cast<uint64_t*>(static_cast<void*>(&d));
-	//uint64_t e2 = *p2;
-	//e2<<=1;  // shift off the sign bit
-	//e2>>=53;  // shr by 53, not 52, b/c above I shl by 1
-	//// Alternate:  e&=0x7FFFFFFFFFFFFFFFu; e>>=52;
-	//return static_cast<uint16_t>(e);
 }
 
 int32_t exponent_unbiased_x8664(double d) {
@@ -107,7 +99,7 @@ uint64_t raw_significand_x8664(double d) {
 	return us&0x000FFFFFFFFFFFFFu;
 }
 
-
+// TODO:  Modify to set the implicit leading bit iff normalized
 int64_t significand_x8664(double d) {
 	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
 	uint64_t us {0};  // us => "unsigned significand"
@@ -144,12 +136,33 @@ bool isnan(double d) {
 	highbits&=0x7FFFu;  // masks off the sign bit
 	highbits>>=4;  // shift off the 4 bytes of significand
 	return highbits==0x0FFF;
+}
 
-	// Illegal method that violates aliasing rules
-	//const uint64_t *pu = static_cast<uint64_t*>(static_cast<void*>(&d));
-	//uint64_t e = (*pu)&0x7FFFFFFFFFFFFFFFu;
-	//e>>=52;
-	//return (e==0x00000000000007FFu);
+// 0.0 => !std::isnormal()
+bool isdenorm(double d) {
+	return exponent_biased_x8664(d)==0x0000u;
+}
+
+//
+// TODO:  Why is FP_NORMAL&FP_SUBNORMAL == true  ???
+//
+std::string print_fpclassify(double d) {
+	std::string s {};
+
+	auto c = std::fpclassify(d);
+	if (c&FP_INFINITE) { s += "Inf "; }
+	if (c&FP_NAN) { s += "NaN "; }
+	if (c&FP_NORMAL) { s += "Normal "; }
+	if (c&FP_SUBNORMAL) { s += "Subnormal "; }
+	if (c&FP_ZERO) { s += "Zero "; }
+
+	if (std::isnormal(d)) { s += "std::isnormal() "; }
+	if (std::isnan(d)) { s += "std::isnan() "; }
+	if (std::isinf(d)) { s += "std::isinf() "; }
+	if (std::isfinite(d)) { s += "std::isfinite() "; }
+
+
+	return s;
 }
 
 int test_exponent_x8664() {
@@ -181,6 +194,7 @@ int test_exponent_x8664() {
 			<< "\t=> signbit == " << std::to_string(sb) << " => [" << bitprinter(sb) << "]\n"
 			<< "\t=> raw significand == " << rws << " => [" << bitprinter(rws) << "]\n"
 			<< "\t=> significand == " << s << " => [" << bitprinter(s) << "]\n"
+			<< "\t=> print_fpclassify() == " << print_fpclassify(d) << "]\n"
 			<< std::endl << std::endl;
 	}
 
