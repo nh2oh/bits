@@ -82,6 +82,18 @@ int32_t exponent_unbiased_x8664(double d) {
 	return e;
 }
 
+
+//
+// For an IEEE-754/64 float x = M*2^e, the largest possible M is:
+// M_max == 0x1F'FF'FF'FF'FF'FF'FFu == 2^53-1
+// (the leading 3 bits of the MSB belong to the exponent; the bit following 
+// those three is the sign bit, corresponding to the '1' in the hex string 
+// above).  M_max above corresponds to the greatest magnitude _negative_ 
+// number, since it has its sign bit set.  The largest positive number is
+// M == 0x0F'FF'FF'FF'FF'FF'FFu == 2^52-1
+// 
+//
+//
 int64_t significand_x8664(double d) {
 	const unsigned char *p = static_cast<unsigned char*>(static_cast<void*>(&d));
 	uint64_t us {0};  // us => "unsigned significand"
