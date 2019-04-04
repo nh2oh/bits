@@ -8,6 +8,8 @@
 #include <cmath>
 #include <cstdlib>
 
+// vs2019
+
 int test_floaty() {
 	floaty<2,4,2> f;
 
